@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Grid, Paper, Typography } from '@mui/material';
+import { Button, Card, CardContent, Grid, Paper, Typography } from '@mui/material';
 import ExchangeElement from './ExchangeElement';
 
 export const SALE = 'sale'
@@ -22,7 +22,7 @@ const Exchange: React.FC = () => {
                             <Typography gutterBottom variant='h5'>
                                 Обмен
                             </Typography>
-                            555555555
+                            <Button variant="contained">Contained</Button>
                         </CardContent>
                     </Card>
                 </Paper>

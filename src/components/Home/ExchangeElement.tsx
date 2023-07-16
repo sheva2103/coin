@@ -10,7 +10,7 @@ type ExchangeFormProps = {
     type: string
 }
 
-type error = {isError: boolean, textError: string}
+type errorExchange = {isError: boolean, textError: string}
 
 function createArrayString(arr: myWalletType[]): string[] {
     return arr.map(item => item.id)
@@ -25,9 +25,6 @@ const calculateExchange = (amountSale: number | "" | undefined, priceSale: numbe
     return ""
 }
 
-function isNumber(n: any) {
-    return Number.isInteger(n) || (n === parseFloat(n) && isFinite(n));
-}
 
 const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
 
@@ -35,12 +32,20 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
     const coinsList = useAppSelector<string[]>(state => state.allCoins.allCoins)
     const {sale, buy} = useAppSelector<IExchange>(state => state.exchange)
     const dispatch = useAppDispatch()
-    const [errorAmount, setErrorAmount] = useState({isError: false, textError: ''})
-    const [errorCoin, setErrorCoin] = useState<error>({isError: false, textError: ''})
+    const [errorAmount, setErrorAmount] = useState<errorExchange>({isError: false, textError: ''})
+    const [errorCoin, setErrorCoin] = useState<errorExchange>({isError: false, textError: ''})
     const currentCoinInWallet = useMemo(() => myWallet.find(coin => coin.id === sale.id), [sale.id])
     const [focus, setFocus] = useState({sale: false, buy: false})
 
     useEffect(() => {
+
+        if(sale.id && buy.id && sale.id === buy.id) setErrorCoin({isError: true, textError: 'валюты не должны совпадать'})
+        else setErrorCoin({isError: false, textError: ''})
+
+        if(type === SALE && currentCoinInWallet?.amount && sale.amount && currentCoinInWallet?.amount < sale.amount) {
+            setErrorAmount({isError: true, textError: 'много'})
+        } else setErrorAmount({isError: false, textError: ''})
+
         if(focus.sale) {
             console.log('useeffect sale')
             dispatch(setAmount({type: BUY, value: calculateExchange(sale.amount, sale.currentPrice, buy.currentPrice)}))
@@ -49,19 +54,16 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
             console.log('useeffect buy')
             dispatch(setAmount({type: SALE, value: calculateExchange(buy.amount, buy.currentPrice, sale.currentPrice)}))
         }
-        if(sale.id && buy.id && sale.id === buy.id) setErrorCoin({isError: true, textError: 'валюты не должны совпадать'})
-        else setErrorCoin({isError: false, textError: ''})
+        
     },[sale, buy])
 
 
     const handleChange = (event: any, newValue: string | null) => {
         dispatch(getCoin({type, id: newValue}))
     }
-    const handleChangeAmount = (e: ChangeEvent<HTMLInputElement>) => {
-        if(type === SALE && currentCoinInWallet && +e.target.value > currentCoinInWallet?.amount) {
-            setErrorAmount({isError: true, textError: 'много'})
-        } else setErrorAmount({isError: false, textError: ''})
 
+    const handleChangeAmount = (e: ChangeEvent<HTMLInputElement>) => {
+        if(+e.target.value < 0) return
         dispatch(setAmount({type, value: e.target.value.length > 0 ? +e.target.value : ''}))
     }
 
@@ -98,7 +100,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
                                 error={errorAmount.isError}
                                 helperText={errorAmount.textError}
                                 //disabled={type === SALE ? !sale.id : !buy.id}
-                                disabled={!!sale.id && !!buy.id ? false : true}
+                                disabled={!!sale.id && !!buy.id && !errorCoin.isError ? false : true}
                                 id="outlined-basic" 
                                 label="Сумма" 
                                 variant="outlined" 

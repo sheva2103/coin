@@ -8,10 +8,10 @@ export type myWalletType = {
     currentPrice: number
 }
 
-// type error = {
-//     coin: boolean | string,
-//     amount: boolean | string
-// }
+type error = {
+    coin: string,
+    amount: string
+}
 
 export type ExchangeType = {
     amount?: number | "",
@@ -43,8 +43,8 @@ const initialState: IExchange = {
         currentPrice: null,
         complete: false,
         // error: {
-        //     coin: false,
-        //     amount: false
+        //     coin: '',
+        //     amount: ''
         // }
     },
     buy: {
@@ -54,8 +54,8 @@ const initialState: IExchange = {
         currentPrice: null,
         complete: false,
         // error: {
-        //     coin: false,
-        //     amount: false
+        //     coin: '',
+        //     amount: ''
         // }
     }
 }
@@ -70,28 +70,24 @@ const exchangeSlice = createSlice({
             state.sale.currentPrice = action.payload.currentPrice
             state.sale.image = action.payload.image
             state.sale.amount = ""
-            if(state.sale.amount && state.sale.id) state.sale.complete = true
-            else state.sale.complete = false
+            // if(state.sale.amount && state.sale.id) state.sale.complete = true
+            // else state.sale.complete = false
         },
         setBuy(state, action: PayloadAction<ExchangeType>) {
             state.buy.id = action.payload.id
             state.buy.currentPrice = action.payload.currentPrice
             state.buy.image = action.payload.image
             state.buy.amount = ""
-            if(state.buy.amount && state.buy.id) state.buy.complete = true
-            else state.buy.complete = false
+            // if(state.buy.amount && state.buy.id) state.buy.complete = true
+            // else state.buy.complete = false
         },
         setAmount(state, action: PayloadAction<setAmountType>) {
             if(action.payload.type === SALE) {
-                // if(action.payload.value) state.sale.amount = action.payload.value
-                // else state.sale.amount = ""
                 state.sale.amount = action.payload.value
                 if(state.sale.amount && state.sale.id) state.sale.complete = true
                 else state.sale.complete = false
             }
             if(action.payload.type === BUY) {
-                // if(action.payload.value) state.buy.amount = action.payload.value
-                // else state.buy.amount = ""
                 state.buy.amount = action.payload.value
                 if(state.buy.amount && state.buy.id) state.buy.complete = true
                 else state.buy.complete = false
