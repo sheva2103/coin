@@ -1,7 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { coinsAPI } from "../api/api";
-import { AxiosError, AxiosResponse } from "axios";
-import { IExchange, setAmount, setBuy, setSale } from "./exchangeSlice";
+import { IExchange, setBuy, setSale } from "./exchangeSlice";
 import { BUY, SALE } from "../components/Home/Exchange";
 
 export type coins = {
@@ -45,7 +44,7 @@ type getCoinType = {
 }
 
 const initialState: IAllCoins = {
-    allCoins: ['USD'],
+    allCoins: [],
     loading: false,
     error: null,
     currentCoin: null
@@ -68,32 +67,17 @@ export const getAllCoins = createAsyncThunk<coins[], undefined, {rejectValue: st
 export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string, state: {exchange: IExchange}}>('allCoins/getCoin', async(id, {rejectWithValue, dispatch, getState}) => {
     if(id.id === null) {
         const clearExchange = {amount: 0, id: null, image: null, currentPrice: null, complete: false}
-        // dispatch(setSale(clearExchange))
-        // dispatch(setBuy(clearExchange))
-        // return
         if(id.type === SALE) {
             dispatch(setSale(clearExchange))
-            dispatch(setAmount({type: BUY, value: ''}))
         }
         if(id.type === BUY) {
             dispatch(setBuy(clearExchange))
-            dispatch(setAmount({type: SALE, value: ''}))
         }
         return
     } else {
-        if(id.id === 'USD') {
-            if(id.type === 'sale') {
-                dispatch(setSale(getState().exchange.myWallet[0]))
-                return
-            }
-            if(id.type === 'buy') {
-                dispatch(setBuy(getState().exchange.myWallet[0]))
-                return
-            }
-        }
         const coin = ((await coinsAPI.getCoin(id.id)).data)
         try {
-            const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd, image: coin.image.small}
+            const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd || null, image: coin.image.small, amount: 0}
             if(id.type === 'sale') dispatch(setSale(coinInfo))
             if(id.type === 'buy') dispatch(setBuy(coinInfo))
             if(id.type === 'getCoin') return coin
@@ -108,9 +92,9 @@ const allCoinsSlice = createSlice({
     name: 'allCoins',
     initialState,
     reducers: {
-        // setAllCoins(state, action: PayloadAction<coins[]>) {
-        //     state.allCoins = [...state.allCoins, ...action.payload]
-        // }
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.loading = action.payload
+        },
         setCurrentCoin(state, action: PayloadAction<coin>) {
             state.currentCoin = action.payload
         }
@@ -142,5 +126,5 @@ const allCoinsSlice = createSlice({
     }
 })
 
-//export const {setAllCoins} = allCoinsSlice.actions
+export const {setLoading} = allCoinsSlice.actions
 export default allCoinsSlice.reducer

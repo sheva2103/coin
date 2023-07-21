@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Card, CardContent, Grid, Paper, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import ExchangeElement from './ExchangeElement';
+import ConfirmExhange from './ConfirmExchange';
 
 export const SALE = 'sale'
 export const BUY = 'buy'
@@ -16,16 +17,7 @@ const Exchange: React.FC = () => {
                 <ExchangeElement type={BUY}/>
             </Grid>
             <Grid item xs={11} md={5.5} lg={3} component={'section'}>
-                <Paper elevation={8}>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography gutterBottom variant='h5'>
-                                Обмен
-                            </Typography>
-                            <Button variant="contained">Contained</Button>
-                        </CardContent>
-                    </Card>
-                </Paper>
+                <ConfirmExhange />
             </Grid>
         </Grid>
     );

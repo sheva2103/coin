@@ -1,5 +1,5 @@
-import React, {ChangeEvent, useMemo, useState, useEffect, useRef} from 'react'
-import { Autocomplete, Avatar, Card, CardContent, Grid, Paper, TextField, Typography, useFormControl } from '@mui/material';
+import React, {ChangeEvent, useMemo, useState, useEffect} from 'react'
+import { Autocomplete, Avatar, Card, CardContent, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { IExchange, myWalletType, setAmount } from '../../store/exchangeSlice';
 import { getCoin } from '../../store/allCoins';
@@ -12,15 +12,11 @@ type ExchangeFormProps = {
 
 type errorExchange = {isError: boolean, textError: string}
 
-function createArrayString(arr: myWalletType[]): string[] {
-    return arr.map(item => item.id)
-}
-
 const calculateExchange = (amountSale: number | "" | undefined, priceSale: number | null, priceBuy: number | null ): number | "" => {
     //if(amountSale && priceSale && priceBuy) return amountSale * priceSale / priceBuy
     if(amountSale && priceSale && priceBuy) {
         let exchange = amountSale * priceSale / priceBuy
-        return +exchange.toFixed(3)
+        return +exchange.toFixed(+exchange > 1 ? 3 : 5)
     }
     return ""
 }
@@ -33,25 +29,32 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
     const {sale, buy} = useAppSelector<IExchange>(state => state.exchange)
     const dispatch = useAppDispatch()
     const [errorAmount, setErrorAmount] = useState<errorExchange>({isError: false, textError: ''})
-    const [errorCoin, setErrorCoin] = useState<errorExchange>({isError: false, textError: ''})
-    const currentCoinInWallet = useMemo(() => myWallet.find(coin => coin.id === sale.id), [sale.id])
+    //const [errorCoin, setErrorCoin] = useState<errorExchange>({isError: false, textError: ''})
+    const currentCoinInWallet = useMemo(() => myWallet.find(coin => coin.id === sale.id), [sale.id, myWallet])
     const [focus, setFocus] = useState({sale: false, buy: false})
+
+    const coinsForExchange = useMemo(() => {
+
+        if(type === SALE) return myWallet.filter(item => item.id !== buy.id).map(item => item.id)
+        else if(type === BUY) return coinsList.filter(item => item !== sale.id)
+        else return []
+
+
+    }, [sale.id, buy.id, coinsList])
 
     useEffect(() => {
 
-        if(sale.id && buy.id && sale.id === buy.id) setErrorCoin({isError: true, textError: 'валюты не должны совпадать'})
-        else setErrorCoin({isError: false, textError: ''})
+        // if(sale.id && buy.id && sale.id === buy.id) setErrorCoin({isError: true, textError: 'валюты не должны совпадать'})
+        // else setErrorCoin({isError: false, textError: ''})
 
-        if(type === SALE && currentCoinInWallet?.amount && sale.amount && currentCoinInWallet?.amount < sale.amount) {
+        if(type === SALE && currentCoinInWallet && sale.amount && currentCoinInWallet.amount < sale.amount) {
             setErrorAmount({isError: true, textError: 'много'})
         } else setErrorAmount({isError: false, textError: ''})
 
         if(focus.sale) {
-            console.log('useeffect sale')
             dispatch(setAmount({type: BUY, value: calculateExchange(sale.amount, sale.currentPrice, buy.currentPrice)}))
         }
         if(focus.buy) {
-            console.log('useeffect buy')
             dispatch(setAmount({type: SALE, value: calculateExchange(buy.amount, buy.currentPrice, sale.currentPrice)}))
         }
         
@@ -80,27 +83,23 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
                             <Autocomplete
                                 value={type === SALE ? sale.id : buy.id}
                                 onChange={handleChange}
-                                options={ type === SALE ? createArrayString(myWallet) : coinsList}
+                                options={coinsForExchange}
                                 sx={{ width: "100%" }}
                                 renderInput={(params) => <TextField {...params}
                                                             label="Выбрать" 
                                                             required
-                                                            error={errorCoin.isError}
-                                                            helperText={errorCoin.textError}
                                                             onFocus={() => setFocus({...focus, [type]: true})}
                                                             onBlur={() => setFocus({...focus, [type]: false})}
                                                             />}
                             />
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            
                             <TextField
                             onFocus={() => setFocus({...focus, [type]: true})}
                             onBlur={() => setFocus({...focus, [type]: false})}
                                 error={errorAmount.isError}
                                 helperText={errorAmount.textError}
-                                //disabled={type === SALE ? !sale.id : !buy.id}
-                                disabled={!!sale.id && !!buy.id && !errorCoin.isError ? false : true}
+                                disabled={!!sale.id && !!buy.id ? false : true}
                                 id="outlined-basic" 
                                 label="Сумма" 
                                 variant="outlined" 

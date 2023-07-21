@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   const theme = useTheme()
   useEffect(() => {
-    if(allCoins.length === 1) dispatch(getAllCoins())
+    if(allCoins.length === 0) dispatch(getAllCoins())
   },[allCoins])
 
   return (
