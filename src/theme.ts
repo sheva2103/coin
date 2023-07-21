@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { Theme, createTheme } from "@mui/material";
 import { useAppSelector } from "./hooks/hook";
 
 export const useTheme = () => {

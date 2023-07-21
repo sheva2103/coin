@@ -1,9 +1,14 @@
 import React from 'react'
 import Exchange from './Exchange';
+import MyWalletComponent from './MyWallet';
+import { Box } from '@mui/system';
 
 const Home: React.FC = () => {
     return (  
-        <Exchange />
+        <Box>
+            <Exchange />
+            <MyWalletComponent />
+        </Box>
     );
 }
 

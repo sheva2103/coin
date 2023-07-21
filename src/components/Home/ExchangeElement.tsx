@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useMemo, useState, useEffect} from 'react'
+import React, {ChangeEvent, useMemo, useState, useEffect, memo} from 'react'
 import { Autocomplete, Avatar, Card, CardContent, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { IExchange, myWalletType, setAmount } from '../../store/exchangeSlice';
@@ -34,7 +34,6 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
     const [focus, setFocus] = useState({sale: false, buy: false})
 
     const coinsForExchange = useMemo(() => {
-
         if(type === SALE) return myWallet.filter(item => item.id !== buy.id).map(item => item.id)
         else if(type === BUY) return coinsList.filter(item => item !== sale.id)
         else return []
@@ -48,7 +47,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
         // else setErrorCoin({isError: false, textError: ''})
 
         if(type === SALE && currentCoinInWallet && sale.amount && currentCoinInWallet.amount < sale.amount) {
-            setErrorAmount({isError: true, textError: 'много'})
+            setErrorAmount({isError: true, textError: 'Недостаточно средств'})
         } else setErrorAmount({isError: false, textError: ''})
 
         if(focus.sale) {
@@ -58,7 +57,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
             dispatch(setAmount({type: SALE, value: calculateExchange(buy.amount, buy.currentPrice, sale.currentPrice)}))
         }
         
-    },[sale, buy])
+    },[sale.amount, buy.amount])
 
 
     const handleChange = (event: any, newValue: string | null) => {
@@ -78,7 +77,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
                     <Typography gutterBottom variant='h5'>
                         {type}
                     </Typography>
-                    <Grid container alignItems={'center'} spacing={1}>
+                    <Grid container alignItems={'start'} spacing={1}>
                         <Grid item xs={12} sm={8}>
                             <Autocomplete
                                 value={type === SALE ? sale.id : buy.id}
@@ -134,4 +133,4 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
     );
 }
 
-export default ExchangeElement;
+export default memo(ExchangeElement);
