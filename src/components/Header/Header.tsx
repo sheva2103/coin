@@ -4,10 +4,10 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Grid, Stack, Switch } from '@mui/material';
+import { Button, Grid, Stack, Switch } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
-import { setDarkTheme, setMobileMenu } from '../../store/appSlice';
+import { setDarkTheme, setMobileMenu, setModal } from '../../store/appSlice';
 
 interface IHeaderProps {
     // darkMode: boolean,
@@ -37,6 +37,7 @@ const Header: React.FC<IHeaderProps> = () => {
                         </Grid>
                         <Grid item xs={'auto'}>
                             <Stack direction={'row'} spacing={2} sx={{alignItems: 'center'}}>
+                                <Button variant="contained" color="success" onClick={() => dispatch(setModal(true))}>Пополнить счёт</Button>
                                 <Stack direction={'row'} sx={{alignItems: 'center'}}>
                                     <Switch checked={darkMode} onChange={ toogleDarkMode } />
                                     <DarkModeIcon />

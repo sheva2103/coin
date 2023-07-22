@@ -39,7 +39,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
         else return []
 
 
-    }, [sale.id, buy.id, coinsList])
+    }, [sale.id, buy.id, coinsList, myWallet])
 
     useEffect(() => {
 

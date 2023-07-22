@@ -14,12 +14,12 @@ const ConfirmExhange: React.FC = () => {
         dispatch(setLoading(true))
         setTimeout(() => {
             if(exchange.sale.id && exchange.sale.amount && exchange.buy.id && exchange.buy.amount) {
-                dispatch(setLoading(false))
-                dispatch(setExchange({sale: {id: exchange.sale.id, amount: exchange.sale.amount}, 
-                                        buy: {id: exchange.buy.id, amount: exchange.buy.amount}
+                dispatch(setExchange({sale: {id: exchange.sale.id, amount: +exchange.sale.amount.toFixed(exchange.sale.id === 'usd' ? 2 : 8)}, 
+                                        buy: {id: exchange.buy.id, amount: +exchange.buy.amount.toFixed(exchange.buy.id === 'usd' ? 2 : 8)}
                                     }))
                 dispatch(setAmount({type: SALE, value: ''}))
                 dispatch(setAmount({type: BUY, value: ''}))
+                dispatch(setLoading(false))
             }
         }, 500)
     }

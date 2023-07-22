@@ -38,9 +38,7 @@ const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | n
 
 
 const initialState: IExchange = {
-    myWallet: [{id: 'usd', 
-                amount: 100,}, 
-                {id: 'ripple', amount: 200}],
+    myWallet: [],
     sale: {
         amount: "",
         id: null,
@@ -109,9 +107,28 @@ const exchangeSlice = createSlice({
                 return item
             })
             if(!coinForBuy) state.myWallet.push(action.payload.buy)
+            localStorage.setItem('myWallet', JSON.stringify(state.myWallet))
+        },
+        setMyWallet(state, action: PayloadAction<myWalletType[]>) {
+            state.myWallet = action.payload
+            localStorage.setItem('myWallet', JSON.stringify(action.payload))
+        },
+        updateMyWallet(state, action: PayloadAction<number>) {
+            const usd = state.myWallet.find(item => item.id === 'usd')
+            if(!usd) {
+                state.myWallet.push({id: 'usd', amount: action.payload})
+                localStorage.setItem('myWallet', JSON.stringify(state.myWallet))
+                return
+            }
+            const wallet = state.myWallet.map(item => {
+                if(item.id === 'usd') return {...item, amount: item.amount + action.payload}
+                return item
+            })
+            state.myWallet = wallet
+            localStorage.setItem('myWallet', JSON.stringify(wallet))
         }
     }
 })
 
-export const {setSale, setBuy, setAmount, setExchange} = exchangeSlice.actions
+export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet} = exchangeSlice.actions
 export default exchangeSlice.reducer

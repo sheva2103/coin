@@ -6,6 +6,8 @@ import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
 import { getAllCoins } from './store/allCoins';
+import { setMyWallet } from './store/exchangeSlice';
+import TransitionsModal from './components/Modal/TransitionsModal';
 
 
 const App: React.FC = () => {
@@ -17,6 +19,11 @@ const App: React.FC = () => {
   const theme = useTheme()
   useEffect(() => {
     if(allCoins.length === 0) dispatch(getAllCoins())
+    const myWallet = localStorage.getItem('myWallet')
+    if(!myWallet) {
+      dispatch(setMyWallet([{id: 'usd', amount: 100}]))
+    } else dispatch(setMyWallet(JSON.parse(myWallet)))
+    
   },[allCoins])
 
   return (
@@ -28,6 +35,7 @@ const App: React.FC = () => {
       </Backdrop>
       <Header />
       <Main />
+      <TransitionsModal />
     </ThemeProvider>
       
     </>
