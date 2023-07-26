@@ -5,6 +5,7 @@ import Home from '../Home/Home';
 import AllCoins from '../AllCoins/AllCoinst';
 import About from '../About/About';
 import SidebarList from '../SidebarList/SidebarList';
+import ListCoins from '../AllCoins/ListCoins';
 
 
 const Main :React.FC = () => {
@@ -19,7 +20,10 @@ const Main :React.FC = () => {
                 <Grid item xs={true} sx={{height: '100%'}}>
                     <Routes>
                         <Route path='/' element={<Home />}/>
-                        <Route path='/allcoins' element={<AllCoins />}/>
+                        <Route path='/allcoins' element={<AllCoins />}>
+                            <Route path='/allcoins/:page' element={<ListCoins />}/>
+                        </Route>
+                        
                         <Route path='/about' element={<About />}/>
                     </Routes>
                 </Grid>
