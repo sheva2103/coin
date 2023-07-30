@@ -76,6 +76,7 @@ export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string,
         return
     } else {
         const coin = ((await coinsAPI.getCoin(id.id)).data)
+        console.log(coin)
         try {
             const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd || null, image: coin.image.small, amount: 0}
             if(id.type === 'sale') dispatch(setSale(coinInfo))
@@ -119,7 +120,7 @@ const allCoinsSlice = createSlice({
             .addCase(getCoin.pending, (state) => {
                 state.loading = true
             })
-            .addCase(getCoin.fulfilled, (state, action) => {
+            .addCase(getCoin.fulfilled, (state, action: PayloadAction<coin>) => {
                 state.loading = false
                 state.currentCoin = action.payload
             })

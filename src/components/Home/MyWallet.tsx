@@ -11,7 +11,7 @@ const MyWalletComponent: FC = () => {
 
     return (  
         <Box p={4} width={'100%'}>
-            <Paper elevation={3} >
+            {/* <Paper elevation={3} > */}
                 <Typography variant='h4' pt={1} pl={1}>Мой кошелёк</Typography>
                 <Grid container>
                     {myWallet.map(item => (
@@ -23,7 +23,7 @@ const MyWalletComponent: FC = () => {
                         </Grid>
                     ))}
                 </Grid>
-            </Paper>
+            {/* </Paper> */}
         </Box>
     );
 }
