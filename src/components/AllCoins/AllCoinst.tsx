@@ -18,7 +18,7 @@ const AllCoins: React.FC = (props) => {
 
     const coins = useAppSelector(state => state.allCoins.allCoins)
     const pages = Math.floor(coins.length / 100)
-    const params = useParams<{page?: string}>()
+    const params = useParams<{page?: string, id?: string}>()
     const [page, setPage] = useState<number>(params.hasOwnProperty('page') ? parseInt(`${params.page?.split('=')[1]}`) : 1)
     const handleChange = (event: ChangeEvent<unknown>, value: number) => {
         setPage(value)
@@ -28,17 +28,18 @@ const AllCoins: React.FC = (props) => {
 
     return (  
         <Box p={2}>
-            {page == 1 && 
+            {page == 1 && !params.id &&
                 <Grid container item xs={11} md={9} lg={8} sx={{m: '0 auto'}}>
                     {firstPage.map(item => (
                         <Grid item key={item} width={'200px'} p={2}>
-                            <LinkUI href={item}>{item}</LinkUI>
+                            <LinkUI href={`allcoins/charts/${item}`}>{item}</LinkUI>
                         </Grid>
                     ))}
                 </Grid>
             }
             <Outlet />
-            <Pagination 
+            {!params.id &&
+                    <Pagination 
                     sx={{'& ul': {justifyContent: 'center'}}}
                     count={pages} 
                     color="primary" 
@@ -51,7 +52,8 @@ const AllCoins: React.FC = (props) => {
                             {...item}
                         />
                     )}
-            />
+                    />
+            }
         </Box>
     );
 }

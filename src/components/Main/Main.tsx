@@ -6,6 +6,7 @@ import AllCoins from '../AllCoins/AllCoinst';
 import About from '../About/About';
 import SidebarList from '../SidebarList/SidebarList';
 import ListCoins from '../AllCoins/ListCoins';
+import CoinInfo from '../AllCoins/CoinInfo';
 
 
 const Main :React.FC = () => {
@@ -22,6 +23,7 @@ const Main :React.FC = () => {
                         <Route path='/' element={<Home />}/>
                         <Route path='/allcoins' element={<AllCoins />}>
                             <Route path='/allcoins/:page' element={<ListCoins />}/>
+                            <Route path='/allcoins/charts/:id' element={<CoinInfo />}/>
                         </Route>
                         
                         <Route path='/about' element={<About />}/>
