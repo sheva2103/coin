@@ -7,13 +7,15 @@ import FormLabel from '@mui/material/FormLabel';
 
 type Props = {
     value: string | null,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
+    setCoin: (value: null) => void
 }
 
-const ControlledRadioButtonsGroup: React.FC<Props> = ({value, setValue}) => {
+const ControlledRadioButtonsGroup: React.FC<Props> = ({value, setValue, setCoin}) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue((event.target as HTMLInputElement).value);
+        setCoin(null)
     };
 
     return (
@@ -29,7 +31,6 @@ const ControlledRadioButtonsGroup: React.FC<Props> = ({value, setValue}) => {
             <FormControlLabel value="sale" control={<Radio />} label="sale" />
             <FormControlLabel value="buy" control={<Radio />} label="buy" />
         </RadioGroup>
-        {value}
         </FormControl>
     );
 }

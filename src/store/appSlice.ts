@@ -11,6 +11,7 @@ type Modal = {
     type: string
 }
 
+
 const initialState: appState = {
     darkTheme: false,
     mobileMenuIsOpen: false,

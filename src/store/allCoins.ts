@@ -78,7 +78,7 @@ export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string,
         const coin = ((await coinsAPI.getCoin(id.id)).data)
         console.log(coin)
         try {
-            const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd || null, image: coin.image.small, amount: 0}
+            const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd || null, image: coin.image.large, amount: 0}
             if(id.type === 'sale') dispatch(setSale(coinInfo))
             if(id.type === 'buy') dispatch(setBuy(coinInfo))
             if(id.type === 'getCoin') return coin

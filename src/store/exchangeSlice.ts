@@ -18,7 +18,8 @@ export type ExchangeType = {
 export interface IExchange {
     myWallet: myWalletType[]
     sale: ExchangeType,
-    buy: ExchangeType
+    buy: ExchangeType,
+    delayedExchange: delayedExchangeType[]
 }
 
 type setAmountType = {
@@ -29,6 +30,13 @@ type setAmountType = {
 type ExchangeConfirm = {
     sale: myWalletType,
     buy: myWalletType
+}
+
+type delayedExchangeType = {
+    id: string,
+    expectedPrice: number,
+    amount: number,
+    type: string
 }
 
 const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | null): number | undefined => {
@@ -52,7 +60,8 @@ const initialState: IExchange = {
         image: null,
         currentPrice: null,
         complete: false,
-    }
+    },
+    delayedExchange: []
 }
 
 
@@ -126,9 +135,12 @@ const exchangeSlice = createSlice({
             })
             state.myWallet = wallet
             localStorage.setItem('myWallet', JSON.stringify(wallet))
+        },
+        addDelayedExchange(state, action: PayloadAction<delayedExchangeType>) {
+            state.delayedExchange.push(action.payload)
         }
     }
 })
 
-export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet} = exchangeSlice.actions
+export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, addDelayedExchange} = exchangeSlice.actions
 export default exchangeSlice.reducer
