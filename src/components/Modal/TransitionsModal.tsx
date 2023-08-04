@@ -11,9 +11,11 @@ import { TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { updateMyWallet } from '../../store/exchangeSlice';
 import { setLoading } from '../../store/allCoins';
+import ReplenishmentModal from './ReplenishmentModal';
+import DelayedExchangeModal from './DelayedExchangeModal';
 
 export const DELAYED_EXCHANGE = 'DELAYED_EXCHANGE'
-export const TEPLENISHMENT = 'TEPLENISHMENT'
+export const REPLENISHMENT = 'TEPLENISHMENT'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -30,20 +32,9 @@ const style = {
 
 export default function TransitionsModal() {
 
-  const isOpen = useAppSelector(state => state.app.modal)
+  const modal = useAppSelector(state => state.app.modal)
   const dispatch = useAppDispatch()
-  const handleClose = () => dispatch(setModal(false));
-  const [amount, setAmount] = React.useState<number | string>('')
-  const addMoney = () => {
-    if(+amount > 0) {
-      dispatch(setLoading(true))
-      setTimeout(() => {
-        dispatch(updateMyWallet(+amount))
-        dispatch(setLoading(false))
-        handleClose()
-      }, 2000)
-    }
-  }
+  const handleClose = () => dispatch(setModal({isOpen: false, type: ''}));
 
   return (
     <div>
@@ -51,7 +42,7 @@ export default function TransitionsModal() {
         sx={{zIndex: (theme) => theme.zIndex.drawer - 1}}
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={isOpen}
+        open={modal.isOpen}
         onClose={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
@@ -61,25 +52,14 @@ export default function TransitionsModal() {
           },
         }}
       >
-        <Fade in={isOpen}>
+        <Fade in={modal.isOpen}>
           <Box sx={style}>
-            
-            <Stack direction={'column'} spacing={2}>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
-                Пополнить usd кошелёк
-              </Typography>
-                <TextField 
-                      type='number'
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      autoFocus
-                      />
-                <Button 
-                    variant="contained"
-                    onClick={addMoney}
-                    >Добавить
-                </Button>
-            </Stack>
+            {modal.type === REPLENISHMENT &&
+              <ReplenishmentModal handleClose={handleClose}/>
+            }
+            {modal.type === DELAYED_EXCHANGE &&
+              <DelayedExchangeModal />
+            }
           </Box>
         </Fade>
       </Modal>

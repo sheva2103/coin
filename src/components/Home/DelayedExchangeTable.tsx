@@ -4,6 +4,9 @@ import { CardActionArea } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import { useAppDispatch } from '../../hooks/hook';
+import { setModal } from '../../store/appSlice';
+import { DELAYED_EXCHANGE } from '../Modal/TransitionsModal';
 
 
 const Item = styled(Card)(({ theme }) => ({
@@ -22,11 +25,16 @@ const Item = styled(Card)(({ theme }) => ({
 
 const DelayedExchangeTable: FC = () => {
 
+    const dispatch = useAppDispatch()
 
     return (  
         <Box p={4}>
             <hr style={{border: '1px dotted rgb(25, 118, 210)'}}/>
-            <Button variant="contained" sx={{margin: '16px 0'}}>Запланировать обмен</Button>
+            <Button variant="contained" 
+                    sx={{margin: '16px 0'}}
+                    onClick={() => dispatch(setModal({isOpen: true, type: DELAYED_EXCHANGE}))}
+                    >Запланировать обмен
+            </Button>
             <Grid container direction={'row'} gap={2}>
                 <Grid item xs={12} sm={4} md={3} lg={2}>
                     <Item>
