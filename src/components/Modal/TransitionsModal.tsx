@@ -12,6 +12,9 @@ import { Stack } from '@mui/system';
 import { updateMyWallet } from '../../store/exchangeSlice';
 import { setLoading } from '../../store/allCoins';
 
+export const DELAYED_EXCHANGE = 'DELAYED_EXCHANGE'
+export const TEPLENISHMENT = 'TEPLENISHMENT'
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -32,7 +35,7 @@ export default function TransitionsModal() {
   const handleClose = () => dispatch(setModal(false));
   const [amount, setAmount] = React.useState<number | string>('')
   const addMoney = () => {
-    if(amount) {
+    if(+amount > 0) {
       dispatch(setLoading(true))
       setTimeout(() => {
         dispatch(updateMyWallet(+amount))
@@ -62,20 +65,20 @@ export default function TransitionsModal() {
           <Box sx={style}>
             
             <Stack direction={'column'} spacing={2}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Пополнить usd кошелёк
-            </Typography>
-              <TextField 
-                    type='number'
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    autoFocus
-                    />
-              <Button 
-                  variant="contained"
-                  onClick={addMoney}
-                  >Добавить
-              </Button>
+              <Typography id="transition-modal-title" variant="h6" component="h2">
+                Пополнить usd кошелёк
+              </Typography>
+                <TextField 
+                      type='number'
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      autoFocus
+                      />
+                <Button 
+                    variant="contained"
+                    onClick={addMoney}
+                    >Добавить
+                </Button>
             </Stack>
           </Box>
         </Fade>

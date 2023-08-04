@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/hook';
 import { Link as LinkUI, Grid } from '@mui/material';
 
@@ -14,7 +14,8 @@ const ListCoins: React.FC = () => {
             <Grid container item xs={11} md={9} lg={8} sx={{m: '0 auto'}}>
                     {list.map(item => (
                         <Grid item key={item} width={'200px'} p={2}>
-                            <LinkUI href={`charts/${item}`}>{item}</LinkUI>
+                            {<LinkUI href={`charts/${item}`}>{item}</LinkUI>}
+                            {/* <NavLink to={`charts/${item}`}>{item}</NavLink> */}
                         </Grid>
                     ))}
             </Grid>
