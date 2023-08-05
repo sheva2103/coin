@@ -1,14 +1,18 @@
-import React, { ChangeEvent, FC, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Stack, Button } from '@mui/material';
 import ControlledRadioButtonsGroup from './ControlledRadioButtonsGroup';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { SALE } from '../Home/Exchange';
-import { addDelayedExchange } from '../../store/exchangeSlice';
+import { setDelayedExchange } from '../../store/exchangeSlice';
 import { setLoading } from '../../store/allCoins';
 
-const DelayedExchangeModal: React.FC = () => {
+type DelayedExchangeModalType = {
+    handleClose: () => void
+}
+
+const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose}) => {
 
     const myWallet = useAppSelector(state => state.exchange.myWallet)
     const allCoins = useAppSelector(state => state.allCoins.allCoins)
@@ -16,19 +20,20 @@ const DelayedExchangeModal: React.FC = () => {
 
     const [type, setType] = React.useState<string | null>(SALE);
     const [coin, setCoin] = React.useState<string | null>(null);
-    const listCoinFromWallet = useMemo(() => myWallet.map(item => item.id).filter(item => item !== 'usd'), [])
+    const listCoinFromWallet = useMemo(() => myWallet.map(item => item.id).filter(item => item !== 'usd'), [myWallet])
     const [inputValue, setInputValue] = React.useState('');
     const [price, setPrice] = useState<number | string>('')
     const [amount, setAmount] = useState<number | string>('')
-    const currentCoinFromWallet = useMemo(() => myWallet.find(item => item.id === coin),[coin])
+    const currentCoinFromWallet = useMemo(() => myWallet.find(item => item.id === coin),[coin, myWallet])
 
     const addExchange = (): void => {
 
         if(coin && price && amount && type) {
             dispatch(setLoading(true))
             setTimeout(() => {
-                dispatch(addDelayedExchange({id: coin, expectedPrice: +price, amount: +amount, type}))
+                dispatch(setDelayedExchange({id: coin, expectedPrice: +price, amount: +amount, type}))
                 dispatch(setLoading(false))
+                handleClose()
             }, 500)
         }
     }

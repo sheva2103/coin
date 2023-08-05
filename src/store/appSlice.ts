@@ -27,6 +27,7 @@ const appSlice = createSlice({
     reducers: {
         setDarkTheme(state, action: PayloadAction<boolean>) {
             state.darkTheme = action.payload
+            localStorage.setItem('darkMode', JSON.stringify(action.payload))
         },
         setMobileMenu(state, action: PayloadAction<boolean>) {
             state.mobileMenuIsOpen = action.payload

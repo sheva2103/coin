@@ -3,14 +3,8 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setModal } from '../../store/appSlice';
-import { TextField } from '@mui/material';
-import { Stack } from '@mui/system';
-import { updateMyWallet } from '../../store/exchangeSlice';
-import { setLoading } from '../../store/allCoins';
 import ReplenishmentModal from './ReplenishmentModal';
 import DelayedExchangeModal from './DelayedExchangeModal';
 
@@ -58,7 +52,7 @@ export default function TransitionsModal() {
               <ReplenishmentModal handleClose={handleClose}/>
             }
             {modal.type === DELAYED_EXCHANGE &&
-              <DelayedExchangeModal />
+              <DelayedExchangeModal handleClose={handleClose}/>
             }
           </Box>
         </Fade>

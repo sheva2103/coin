@@ -32,11 +32,12 @@ type ExchangeConfirm = {
     buy: myWalletType
 }
 
-type delayedExchangeType = {
+export type delayedExchangeType = {
     id: string,
     expectedPrice: number,
     amount: number,
-    type: string
+    type: string,
+    delete?: boolean
 }
 
 const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | null): number | undefined => {
@@ -136,11 +137,16 @@ const exchangeSlice = createSlice({
             state.myWallet = wallet
             localStorage.setItem('myWallet', JSON.stringify(wallet))
         },
-        addDelayedExchange(state, action: PayloadAction<delayedExchangeType>) {
-            state.delayedExchange.push(action.payload)
+        setDelayedExchange(state, action: PayloadAction<delayedExchangeType>) {
+            if(action.payload.delete) {
+                state.delayedExchange = state.delayedExchange.filter(item => item.id !== action.payload.id)
+            } else {
+                state.delayedExchange.push(action.payload)
+            }
+            localStorage.setItem('delayedExchange', JSON.stringify(state.delayedExchange))
         }
     }
 })
 
-export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, addDelayedExchange} = exchangeSlice.actions
+export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange} = exchangeSlice.actions
 export default exchangeSlice.reducer
