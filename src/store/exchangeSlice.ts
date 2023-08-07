@@ -37,7 +37,8 @@ export type delayedExchangeType = {
     expectedPrice: number,
     amount: number,
     type: string,
-    delete?: boolean
+    delete?: boolean,
+    img: string
 }
 
 const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | null): number | undefined => {

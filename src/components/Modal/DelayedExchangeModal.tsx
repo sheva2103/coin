@@ -6,7 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { SALE } from '../Home/Exchange';
 import { setDelayedExchange } from '../../store/exchangeSlice';
-import { setLoading } from '../../store/allCoins';
+import { coin, setLoading } from '../../store/allCoins';
+import { coinsAPI } from '../../api/api';
+import { AxiosResponse } from 'axios';
 
 type DelayedExchangeModalType = {
     handleClose: () => void
@@ -26,15 +28,18 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
     const [amount, setAmount] = useState<number | string>('')
     const currentCoinFromWallet = useMemo(() => myWallet.find(item => item.id === coin),[coin, myWallet])
 
-    const addExchange = (): void => {
+    const addExchange = async() => {
 
         if(coin && price && amount && type) {
             dispatch(setLoading(true))
-            setTimeout(() => {
-                dispatch(setDelayedExchange({id: coin, expectedPrice: +price, amount: +amount, type}))
-                dispatch(setLoading(false))
-                handleClose()
-            }, 500)
+            coinsAPI.getCoin(coin)
+                .then(({data}) => {
+                    setTimeout(() => {
+                        dispatch(setDelayedExchange({id: coin, expectedPrice: +price, amount: +amount, type, img: data.image.large}))
+                        dispatch(setLoading(false))
+                        handleClose()
+                    }, 500)
+                })
         }
     }
 

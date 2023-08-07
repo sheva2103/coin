@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { coinsAPI } from "../api/api";
-import { IExchange, setBuy, setSale } from "./exchangeSlice";
+import { IExchange, delayedExchangeType, setBuy, setSale } from "./exchangeSlice";
 import { BUY, SALE } from "../components/Home/Exchange";
 
 export type coins = {
@@ -40,7 +40,8 @@ export type coin = {
 
 type getCoinType = {
     type: string
-    id: string | null
+    id: string | null,
+    //delayedExchange?: delayedExchangeType
 }
 
 const initialState: IAllCoins = {

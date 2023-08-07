@@ -43,7 +43,7 @@ const App: React.FC = () => {
     const interval = setInterval(() => {
       if(delayedExchange.length === 0) clearInterval(interval)
         console.log('interval', isInerval, delayedExchange)
-    }, 2000)
+    }, 20000)
     return () => clearInterval(interval)
   },[delayedExchange])
 
