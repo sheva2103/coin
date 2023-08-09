@@ -1,5 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { AnyAction, Dispatch, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BUY, SALE } from "../components/Home/Exchange";
+import { coinsAPI } from "../api/api";
+import { coin } from "./allCoins";
+import { AxiosResponse } from "axios";
 
 export type myWalletType = {
     id: string,
@@ -38,7 +41,8 @@ export type delayedExchangeType = {
     amount: number,
     type: string,
     delete?: boolean,
-    img: string
+    img: string,
+    error?: string
 }
 
 const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | null): number | undefined => {
@@ -46,6 +50,7 @@ const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | n
     return currentCoin ? currentCoin.amount : undefined
 }
 
+//написать санку для отложенных обменов
 
 const initialState: IExchange = {
     myWallet: [],
@@ -65,6 +70,43 @@ const initialState: IExchange = {
     },
     delayedExchange: []
 }
+
+export const checkDelayedExchange = createAsyncThunk<coin, string, {rejectValue: delayedExchangeType, state: {exchange: IExchange}, dispatch: Dispatch<AnyAction>}>(
+    'exchangeSlice/checkDelayedExchange',
+    async(id, {rejectWithValue, dispatch, getState}) => {
+        //try {
+            const coin: AxiosResponse<coin> = (await coinsAPI.getCoin(id))
+            const currentCoin = getState().exchange.delayedExchange.find(item => item.id === id)
+            if(currentCoin) {
+                if(currentCoin.type === SALE && currentCoin.expectedPrice <= coin.data.market_data.current_price.usd) {
+                    console.log('createAsyncThunk')
+                    dispatch(setExchange({
+                        sale: {id, amount: currentCoin.amount},
+                        buy: { id: 'usd', amount: +(coin.data.market_data.current_price.usd * currentCoin.amount).toFixed(2)}
+                    }))
+                    dispatch(setDelayedExchange({...currentCoin, delete: true}))
+                }
+                if(currentCoin.type === BUY && currentCoin.expectedPrice <= coin.data.market_data.current_price.usd) {
+                    const sum = currentCoin.amount * coin.data.market_data.current_price.usd
+                    const amountUsdInWallet = getState().exchange.myWallet.find(item => item.id === 'usd')?.amount
+                    if(amountUsdInWallet && sum > amountUsdInWallet) {
+                        rejectWithValue({...currentCoin, error: 'Недостаточно средств'})
+                    }
+                    if(amountUsdInWallet && sum <= amountUsdInWallet) {
+                        dispatch(setExchange({
+                            sale: { id: 'usd', amount: sum},
+                            buy: {id, amount: currentCoin.amount}
+                        }))
+                        dispatch(setDelayedExchange({...currentCoin, delete: true}))
+                    }
+                }
+            }
+            return coin.data
+        // } catch {
+        //     return rejectWithValue('error')
+        // }
+    }
+)
 
 
 const exchangeSlice = createSlice({
@@ -100,10 +142,10 @@ const exchangeSlice = createSlice({
         },
         setExchange(state, action: PayloadAction<ExchangeConfirm>) {
             const coinForBuy = state.myWallet.find(item => item.id === action.payload.buy.id)
-            
+            console.log('setExchange')
             state.myWallet = state.myWallet.filter(item => {
                 if(item.id === action.payload.sale.id) {
-                    item.amount = item.amount - action.payload.sale.amount
+                    item.amount = item.id === 'usd' ? +(item.amount - action.payload.sale.amount).toFixed(2) : item.amount - action.payload.sale.amount
                     if(!item.amount) {
                         state.sale.id = null
                         state.sale.currentPrice = null
@@ -146,6 +188,24 @@ const exchangeSlice = createSlice({
             }
             localStorage.setItem('delayedExchange', JSON.stringify(state.delayedExchange))
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(checkDelayedExchange.fulfilled, (state, action: PayloadAction<coin>) => {
+                const currentCoin = state.delayedExchange.find(item => item.id === action.payload.id)
+                if(currentCoin) {
+                    if(currentCoin.type === SALE && action.payload.market_data.current_price.usd >= currentCoin.expectedPrice) {
+                        setExchange({
+                            sale: {id: currentCoin.id, amount: currentCoin.amount},
+                            buy: {id: 'usd', amount: action.payload.market_data.current_price.usd * currentCoin.amount}
+                        })
+                        console.log('проведено')
+                    }
+                }
+            })
+            .addCase(checkDelayedExchange.rejected, (state, actions) => {
+                
+            })
     }
 })
 

@@ -5,8 +5,8 @@ import { Backdrop, CircularProgress, CssBaseline, ThemeProvider } from '@mui/mat
 import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
-import { getAllCoins } from './store/allCoins';
-import { setDelayedExchange, delayedExchangeType, setMyWallet } from './store/exchangeSlice';
+import { getAllCoins, getCoin } from './store/allCoins';
+import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
 
@@ -43,7 +43,10 @@ const App: React.FC = () => {
     const interval = setInterval(() => {
       if(delayedExchange.length === 0) clearInterval(interval)
         console.log('interval', isInerval, delayedExchange)
-    }, 20000)
+        delayedExchange.forEach(item => {
+          dispatch(checkDelayedExchange(item.id))
+        })
+    }, 10000)
     return () => clearInterval(interval)
   },[delayedExchange])
 
