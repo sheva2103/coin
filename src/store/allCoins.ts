@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AnyAction, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { coinsAPI } from "../api/api";
 import { IExchange, setBuy, setSale } from "./exchangeSlice";
 import { BUY, SALE } from "../components/Home/Exchange";
@@ -118,14 +118,29 @@ const allCoinsSlice = createSlice({
                 }
             })
             .addCase(getCoin.pending, (state) => {
+                state.error = null
                 state.loading = true
             })
             .addCase(getCoin.fulfilled, (state, action: PayloadAction<coin>) => {
                 state.loading = false
                 state.currentCoin = action.payload
             })
+            .addCase(getCoin.rejected, (state, action) => {
+                if(typeof action.payload === 'string') {
+                    state.loading = false
+                    state.error = action.payload
+                }
+            })
+            // .addMatcher(isError, (state, action: PayloadAction<string>) => {
+            //     state.loading = false
+            //     state.error = action.payload
+            // })
     }
 })
+
+// function isError(action: AnyAction) {
+//     return action.type.endsWith('rejected')
+// }
 
 export const {setLoading} = allCoinsSlice.actions
 export default allCoinsSlice.reducer

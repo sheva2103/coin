@@ -2,7 +2,7 @@ import { AnyAction, Dispatch, PayloadAction, createAsyncThunk, createSlice } fro
 import { BUY, SALE } from "../components/Home/Exchange";
 import { coinsAPI } from "../api/api";
 import { coin } from "./allCoins";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 export type myWalletType = {
     id: string,
@@ -22,7 +22,8 @@ export interface IExchange {
     myWallet: myWalletType[]
     sale: ExchangeType,
     buy: ExchangeType,
-    delayedExchange: delayedExchangeType[]
+    delayedExchange: delayedExchangeType[],
+    error?: string | null
 }
 
 type setAmountType = {
@@ -68,13 +69,14 @@ const initialState: IExchange = {
         currentPrice: null,
         complete: false,
     },
-    delayedExchange: []
+    delayedExchange: [],
+    error: null
 }
 
 export const checkDelayedExchange = createAsyncThunk<coin, string, {rejectValue: delayedExchangeType, state: {exchange: IExchange}, dispatch: Dispatch<AnyAction>}>(
     'exchangeSlice/checkDelayedExchange',
     async(id, {rejectWithValue, dispatch, getState}) => {
-        //try {
+        try {
             const coin: AxiosResponse<coin> = (await coinsAPI.getCoin(id))
             const currentCoin = getState().exchange.delayedExchange.find(item => item.id === id)
             if(currentCoin) {
@@ -86,11 +88,12 @@ export const checkDelayedExchange = createAsyncThunk<coin, string, {rejectValue:
                     }))
                     dispatch(setDelayedExchange({...currentCoin, delete: true}))
                 }
-                if(currentCoin.type === BUY && currentCoin.expectedPrice <= coin.data.market_data.current_price.usd) {
+                if(currentCoin.type === BUY && currentCoin.expectedPrice >= coin.data.market_data.current_price.usd) {
                     const sum = currentCoin.amount * coin.data.market_data.current_price.usd
                     const amountUsdInWallet = getState().exchange.myWallet.find(item => item.id === 'usd')?.amount
-                    if(amountUsdInWallet && sum > amountUsdInWallet) {
-                        rejectWithValue({...currentCoin, error: 'Недостаточно средств'})
+                    if(amountUsdInWallet && (sum > amountUsdInWallet)) {
+                        //rejectWithValue({...currentCoin, error: 'Недостаточно средств'})
+                        throw {...currentCoin, error: 'Недостаточно средств'}
                     }
                     if(amountUsdInWallet && sum <= amountUsdInWallet) {
                         dispatch(setExchange({
@@ -102,9 +105,10 @@ export const checkDelayedExchange = createAsyncThunk<coin, string, {rejectValue:
                 }
             }
             return coin.data
-        // } catch {
-        //     return rejectWithValue('error')
-        // }
+        } catch(err: any) {
+            //console.log(err)
+            return rejectWithValue(err)
+        }
     }
 )
 
@@ -154,7 +158,8 @@ const exchangeSlice = createSlice({
                     return item.amount > 0
                 }
                 if(item.id === action.payload.buy.id) {
-                    item.amount = item.amount + action.payload.buy.amount
+                    item.amount = item.id === 'usd' ? +(item.amount + action.payload.buy.amount).toFixed(2) : item.amount + action.payload.buy.amount
+                    console.log(item.amount)
                     return true
                 }
                 return item
@@ -203,11 +208,22 @@ const exchangeSlice = createSlice({
                     }
                 }
             })
-            .addCase(checkDelayedExchange.rejected, (state, actions) => {
-                
+            // .addCase(checkDelayedExchange.rejected, (state, action: AnyAction) => {
+            //         state.delayedExchange = state.delayedExchange.map(item => (
+            //             item.id === action.payload.id ? action.payload : item
+            //         ))
+            // })
+            .addMatcher(isError, (state, action: PayloadAction<delayedExchangeType>) => {
+                    state.delayedExchange = state.delayedExchange.map(item => (
+                        item.id === action.payload.id ? action.payload : item
+                    ))
             })
     }
 })
+
+function isError(action: AnyAction) {
+    return action.type.endsWith('rejected')
+}
 
 export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange} = exchangeSlice.actions
 export default exchangeSlice.reducer

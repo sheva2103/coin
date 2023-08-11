@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { SALE } from '../Home/Exchange';
-import { setDelayedExchange } from '../../store/exchangeSlice';
+import { myWalletType, setDelayedExchange } from '../../store/exchangeSlice';
 import { coin, setLoading } from '../../store/allCoins';
 import { coinsAPI } from '../../api/api';
 import { AxiosResponse } from 'axios';
@@ -14,10 +14,16 @@ type DelayedExchangeModalType = {
     handleClose: () => void
 }
 
+type stateButtonType = {
+    state: boolean,
+    text?: string
+}
+
 const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose}) => {
 
     const myWallet = useAppSelector(state => state.exchange.myWallet)
     const allCoins = useAppSelector(state => state.allCoins.allCoins)
+    const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
     const dispatch = useAppDispatch()
 
     const [type, setType] = React.useState<string | null>(SALE);
@@ -26,7 +32,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
     const [inputValue, setInputValue] = React.useState('');
     const [price, setPrice] = useState<number | string>('')
     const [amount, setAmount] = useState<number | string>('')
-    const currentCoinFromWallet = useMemo(() => myWallet.find(item => item.id === coin),[coin, myWallet])
+    const currentCoinFromWallet = useMemo<myWalletType | undefined>(() => myWallet.find(item => item.id === coin),[coin, myWallet])
 
     const addExchange = async() => {
 
@@ -42,6 +48,15 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 })
         }
     }
+    
+    const stateButton = (): stateButtonType => {
+        const currentCoinFromDelayedExchange = delayedExchange.find(item => item.id === coin)
+        const currentCoinFromAllCoins = allCoins.find(item => item === coin)
+        if(type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount) return {state: true}
+        if(currentCoinFromDelayedExchange && currentCoinFromDelayedExchange.type === type) return {state: true, text: 'Уже добавлено'} //дописать исключения
+        return {state: false}
+    }
+    const isDisabled = stateButton().state
 
     return (  
         <Stack direction={'column'} spacing={2}>
@@ -64,12 +79,12 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 id="outlined-number"
-                label="Ожидаемая цена"
+                label={type === SALE ? "Ожидаемая минимальная цена" : "Ожидаемая максимальная цена"}
                 type="number"
                 InputLabelProps={{
                     shrink: true,
                 }}
-                sx={{width: '200px'}}
+                sx={{width: '250px'}}
             />
             <TextField
                 value={amount}
@@ -80,13 +95,15 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 InputLabelProps={{
                     shrink: true,
                 }}
-                sx={{width: '200px'}}
+                sx={{width: '250px'}}
                 error={type === SALE && currentCoinFromWallet?.amount ? currentCoinFromWallet?.amount < +amount : false}
-                helperText={currentCoinFromWallet && currentCoinFromWallet?.amount < +amount && 'Недостаточно средств'}
+                helperText={type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount && 'Недостаточно средств'}
             />
             <Button 
                 variant="contained"
                 onClick={addExchange}
+                //disabled={type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount}
+                disabled={isDisabled}
                 >Подтвердить
             </Button>
         </Stack>
