@@ -146,7 +146,6 @@ const exchangeSlice = createSlice({
         },
         setExchange(state, action: PayloadAction<ExchangeConfirm>) {
             const coinForBuy = state.myWallet.find(item => item.id === action.payload.buy.id)
-            console.log('setExchange')
             state.myWallet = state.myWallet.filter(item => {
                 if(item.id === action.payload.sale.id) {
                     item.amount = item.id === 'usd' ? +(item.amount - action.payload.sale.amount).toFixed(2) : item.amount - action.payload.sale.amount
@@ -159,7 +158,6 @@ const exchangeSlice = createSlice({
                 }
                 if(item.id === action.payload.buy.id) {
                     item.amount = item.id === 'usd' ? +(item.amount + action.payload.buy.amount).toFixed(2) : item.amount + action.payload.buy.amount
-                    console.log(item.amount)
                     return true
                 }
                 return item
@@ -187,7 +185,7 @@ const exchangeSlice = createSlice({
         },
         setDelayedExchange(state, action: PayloadAction<delayedExchangeType>) {
             if(action.payload.delete) {
-                state.delayedExchange = state.delayedExchange.filter(item => item.id !== action.payload.id)
+                state.delayedExchange = state.delayedExchange.filter(item => item.id === action.payload.id && item.type === action.payload.type ? false : true)
             } else {
                 state.delayedExchange.push(action.payload)
             }

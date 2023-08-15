@@ -9,6 +9,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setDarkTheme, setMobileMenu, setModal } from '../../store/appSlice';
 import { REPLENISHMENT } from '../Modal/TransitionsModal';
+import BasicMenuNotifications from '../Notifications/Notifications';
 
 interface IHeaderProps {
     // darkMode: boolean,
@@ -39,6 +40,7 @@ const Header: React.FC<IHeaderProps> = () => {
                         <Grid item xs={'auto'}>
                             <Stack direction={'row'} spacing={2} sx={{alignItems: 'center'}}>
                                 <Button variant="contained" color="success" onClick={() => dispatch(setModal({isOpen: true, type: REPLENISHMENT}))}>Пополнить счёт</Button>
+                                <BasicMenuNotifications />
                                 <Stack direction={'row'} sx={{alignItems: 'center'}}>
                                     <Switch checked={darkMode} onChange={ toogleDarkMode } />
                                     <DarkModeIcon />

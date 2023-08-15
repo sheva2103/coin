@@ -50,13 +50,12 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
     }
     
     const stateButton = (): stateButtonType => {
-        const currentCoinFromDelayedExchange = delayedExchange.find(item => item.id === coin)
-        const currentCoinFromAllCoins = allCoins.find(item => item === coin)
+        const currentCoinFromDelayedExchange = delayedExchange.find(item => item.id === coin && item.type === type)
         if(type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount) return {state: true}
-        if(currentCoinFromDelayedExchange && currentCoinFromDelayedExchange.type === type) return {state: true, text: 'Уже добавлено'} //дописать исключения
+        if(currentCoinFromDelayedExchange) return {state: true, text: 'Уже добавлено'} //дописать исключения
         return {state: false}
     }
-    const isDisabled = stateButton().state
+    const isDisabled = stateButton()
 
     return (  
         <Stack direction={'column'} spacing={2}>
@@ -73,11 +72,15 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 id="controllable-states-demo"
                 options={type === SALE ? listCoinFromWallet : allCoins}
                 sx={{ width: 'auto' }}
-                renderInput={(params) => <TextField {...params} label="Выбрать" />}
+                renderInput={(params) => <TextField {...params} 
+                                                    label="Выбрать" 
+                                                    error={isDisabled.state}
+                                                    helperText={isDisabled.text}
+                                                    />}
             />
             <TextField
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => +e.target.value >= 0 && setPrice(e.target.value)}
                 id="outlined-number"
                 label={type === SALE ? "Ожидаемая минимальная цена" : "Ожидаемая максимальная цена"}
                 type="number"
@@ -88,7 +91,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
             />
             <TextField
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => +e.target.value >= 0 && setAmount(e.target.value)}
                 id="outlined-number"
                 label="Количество"
                 type="number"
@@ -103,7 +106,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 variant="contained"
                 onClick={addExchange}
                 //disabled={type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount}
-                disabled={isDisabled}
+                disabled={isDisabled.state}
                 >Подтвердить
             </Button>
         </Stack>

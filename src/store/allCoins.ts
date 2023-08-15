@@ -59,7 +59,7 @@ export const getAllCoins = createAsyncThunk<coins[], undefined, {rejectValue: st
             return allCoins.data
         } catch(err) {
             console.log(err)
-            return rejectWithValue('Упс, что-то пошло не так...')
+            return rejectWithValue('Упс, что-то пошло не так... Перезагрузите страницу позже')
         }
         
 })
@@ -76,7 +76,6 @@ export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string,
         return
     } else {
         const coin = ((await coinsAPI.getCoin(id.id)).data)
-        console.log(coin)
         try {
             const coinInfo = {id: coin.id, currentPrice: coin.market_data.current_price.usd || null, image: coin.image.large, amount: 0}
             if(id.type === 'sale') dispatch(setSale(coinInfo))
@@ -84,7 +83,7 @@ export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string,
             if(id.type === 'getCoin') return coin
         } catch(error) {
             console.log('!!!!!!!!!!!!!!!!' ,error)
-            rejectWithValue('Упс, что-то пошло не так...')
+            rejectWithValue('Упс, что-то пошло не так... Перезагрузите страницу позже')
         }
     }
 })

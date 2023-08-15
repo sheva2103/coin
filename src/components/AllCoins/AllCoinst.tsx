@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { Box, PaginationItem, Link as LinkUI, Grid } from '@mui/material';
 import { useAppSelector } from '../../hooks/hook';
 import Pagination from '@mui/material/Pagination';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
 
 
 function scrollToTop() {
@@ -32,7 +32,8 @@ const AllCoins: React.FC = (props) => {
                 <Grid container item xs={11} md={9} lg={8} sx={{m: '0 auto'}}>
                     {firstPage.map(item => (
                         <Grid item key={item} width={'200px'} p={2}>
-                            <LinkUI href={`allcoins/charts/${item}`}>{item}</LinkUI>
+                            {/* <LinkUI href={`allcoins/charts/${item}`}>{item}</LinkUI> */}
+                            <NavLink to={`charts/${item}`}>{item}</NavLink>
                         </Grid>
                     ))}
                 </Grid>

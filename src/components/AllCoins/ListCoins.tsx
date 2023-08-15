@@ -14,8 +14,8 @@ const ListCoins: React.FC = () => {
             <Grid container item xs={11} md={9} lg={8} sx={{m: '0 auto'}}>
                     {list.map(item => (
                         <Grid item key={item} width={'200px'} p={2}>
-                            {<LinkUI href={`charts/${item}`}>{item}</LinkUI>}
-                            {/* <NavLink to={`charts/${item}`}>{item}</NavLink> */}
+                            {/* {<LinkUI href={`charts/${item}`}>{item}</LinkUI>} */}
+                            {<NavLink to={`/allCoins/charts/${item}`}>{item}</NavLink>}
                         </Grid>
                     ))}
             </Grid>

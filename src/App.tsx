@@ -9,6 +9,7 @@ import { getAllCoins, getCoin } from './store/allCoins';
 import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
+import CustomizedSnackbars from './components/Snackbars/Snackbars';
 
 
 const App: React.FC = () => {
@@ -23,45 +24,47 @@ const App: React.FC = () => {
   useEffect(() => {
 
     const darkMode = localStorage.getItem('darkMode')
-    if(darkMode) dispatch(setDarkTheme(JSON.parse(darkMode)))
+    if (darkMode) dispatch(setDarkTheme(JSON.parse(darkMode)))
 
-    if(allCoins.length === 0) dispatch(getAllCoins())
+    if (allCoins.length === 0) dispatch(getAllCoins())
     const myWallet = localStorage.getItem('myWallet')
-    if(!myWallet) {
-      dispatch(setMyWallet([{id: 'usd', amount: 100}]))
+
+    if (!myWallet) {
+      dispatch(setMyWallet([{ id: 'usd', amount: 100 }]))
     } else dispatch(setMyWallet(JSON.parse(myWallet)))
 
     const delayedExchangeFromLS = localStorage.getItem('delayedExchange')
-    if(delayedExchangeFromLS && delayedExchange.length === 0) {
+    if (delayedExchangeFromLS && delayedExchange.length === 0) {
       const delayedExchangeArray: delayedExchangeType[] = JSON.parse(delayedExchangeFromLS)
       delayedExchangeArray.forEach(item => dispatch(setDelayedExchange(item)))
     }
-  },[allCoins, dispatch])
+  }, [allCoins, dispatch])
 
   useEffect(() => {
-    
+
     const interval = setInterval(() => {
-      if(delayedExchange.length === 0) clearInterval(interval)
-        console.log('interval', isInerval, delayedExchange)
-        delayedExchange.forEach(item => {
-          dispatch(checkDelayedExchange(item.id))
-        })
+      if (delayedExchange.length === 0) clearInterval(interval)
+      console.log('interval', isInerval, delayedExchange)
+      delayedExchange.forEach(item => {
+        dispatch(checkDelayedExchange(item.id))
+      })
     }, 10000)
     return () => clearInterval(interval)
-  },[delayedExchange])
+  }, [delayedExchange])
 
   return (
     <>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <Header />
-      <Main />
-      <TransitionsModal />
-    </ThemeProvider>
-      
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Header />
+        <Main />
+        <TransitionsModal />
+        <CustomizedSnackbars />
+      </ThemeProvider>
+
     </>
   );
 }

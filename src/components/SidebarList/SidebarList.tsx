@@ -7,6 +7,9 @@ import { styled } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setMobileMenu } from '../../store/appSlice';
 
+
+//вынести сюда дарк мод которы будет прятаться в слайдер
+
 const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#282828' : 'rgb(25, 118, 210)',
     ...theme.typography.body2,
