@@ -38,19 +38,19 @@ const Header: React.FC<IHeaderProps> = () => {
 
                         </Grid>
                         <Grid item xs={'auto'}>
-                            <Stack direction={'row'} spacing={2} sx={{alignItems: 'center'}}>
+                            <Stack direction={'row'} spacing={1} sx={{alignItems: 'center'}}>
                                 <Button variant="contained" color="success" onClick={() => dispatch(setModal({isOpen: true, type: REPLENISHMENT}))}>Пополнить счёт</Button>
                                 <BasicMenuNotifications />
-                                <Stack direction={'row'} sx={{alignItems: 'center'}}>
+                                {/* <Stack direction={'row'} sx={{alignItems: 'center'}}>
                                     <Switch checked={darkMode} onChange={ toogleDarkMode } />
                                     <DarkModeIcon />
-                                </Stack>
+                                </Stack> */}
                                 <IconButton
                                     size="large"
                                     edge="start"
                                     color="inherit"
                                     aria-label="menu"
-                                    sx={{ mr: 2, display: {xs: 'block', lg: 'none'} }}
+                                    sx={{ mr: 1, p: 0, display: {xs: 'block', lg: 'none'} }}
                                     onClick={ openMobileMenu }
                                 >
                                     <MenuIcon />

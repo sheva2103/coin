@@ -6,7 +6,7 @@ import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
 import { getAllCoins, getCoin } from './store/allCoins';
-import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange } from './store/exchangeSlice';
+import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange, NotificationType, setNotifications } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
 import CustomizedSnackbars from './components/Snackbars/Snackbars';
@@ -18,9 +18,10 @@ const App: React.FC = () => {
   const allCoins = useAppSelector(state => state.allCoins.allCoins)
   const loading = useAppSelector(state => state.allCoins.loading)
   const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
+  const notification = useAppSelector(state => state.exchange.notification)
   let isInerval = false
-
   const theme = useTheme()
+
   useEffect(() => {
 
     const darkMode = localStorage.getItem('darkMode')
@@ -38,6 +39,15 @@ const App: React.FC = () => {
       const delayedExchangeArray: delayedExchangeType[] = JSON.parse(delayedExchangeFromLS)
       delayedExchangeArray.forEach(item => dispatch(setDelayedExchange(item)))
     }
+
+    if(notification.length === 0) {
+      const notificationsFromLS = localStorage.getItem('notifications')
+      if(notificationsFromLS) {
+        const tempArr: NotificationType[] = JSON.parse(notificationsFromLS)
+        tempArr.forEach(item => dispatch(setNotifications(item)))
+      }
+    }
+
   }, [allCoins, dispatch])
 
   useEffect(() => {

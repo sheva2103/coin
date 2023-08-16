@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setMobileMenu } from '../../store/appSlice';
+import Settings from './Settings';
 
 
 //вынести сюда дарк мод которы будет прятаться в слайдер
@@ -61,6 +62,7 @@ const SidebarList: React.FC = () => {
                             </Typography>
                         </ListItem>
                     </ListItemButton>
+                    <Settings />
                 </List>
             </Item>
             <Drawer open={mobileMenuIsOpen} onClose={closeMenu}>
@@ -82,6 +84,7 @@ const SidebarList: React.FC = () => {
                             </Typography>
                         </ListItem>
                     </List>
+                    <Settings />
                 </Item>
             </Drawer>
         </>

@@ -23,7 +23,8 @@ export interface IExchange {
     sale: ExchangeType,
     buy: ExchangeType,
     delayedExchange: delayedExchangeType[],
-    error?: string | null
+    error?: string | null,
+    notification: NotificationType[]
 }
 
 type setAmountType = {
@@ -44,6 +45,12 @@ export type delayedExchangeType = {
     delete?: boolean,
     img: string,
     error?: string
+}
+
+export type NotificationType = {
+    sale: string,
+    buy: string,
+    checked: boolean
 }
 
 const checkAnswerCurrentCoinFromWallet = (wallet: myWalletType[], id: string | null): number | undefined => {
@@ -70,7 +77,8 @@ const initialState: IExchange = {
         complete: false,
     },
     delayedExchange: [],
-    error: null
+    error: null,
+    notification: []
 }
 
 export const checkDelayedExchange = createAsyncThunk<coin, string, {rejectValue: delayedExchangeType, state: {exchange: IExchange}, dispatch: Dispatch<AnyAction>}>(
@@ -164,6 +172,8 @@ const exchangeSlice = createSlice({
             })
             if(!coinForBuy) state.myWallet.push(action.payload.buy)
             localStorage.setItem('myWallet', JSON.stringify(state.myWallet))
+            state.notification.push({sale: action.payload.sale.id, buy: action.payload.buy.id, checked: false})
+            localStorage.setItem('notifications', JSON.stringify(state.notification))
         },
         setMyWallet(state, action: PayloadAction<myWalletType[]>) {
             state.myWallet = action.payload
@@ -190,6 +200,13 @@ const exchangeSlice = createSlice({
                 state.delayedExchange.push(action.payload)
             }
             localStorage.setItem('delayedExchange', JSON.stringify(state.delayedExchange))
+        },
+        notificationsChecked(state) {
+            state.notification = state.notification.map(item => ({...item, checked: true}))
+            localStorage.setItem('notifications', JSON.stringify(state.notification))
+        },
+        setNotifications(state, action: PayloadAction<NotificationType>) {
+            state.notification.push(action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -223,5 +240,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected')
 }
 
-export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange} = exchangeSlice.actions
+export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange, notificationsChecked, setNotifications} = exchangeSlice.actions
 export default exchangeSlice.reducer
