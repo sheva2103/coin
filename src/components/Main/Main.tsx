@@ -7,6 +7,7 @@ import About from '../About/About';
 import SidebarList from '../SidebarList/SidebarList';
 import ListCoins from '../AllCoins/ListCoins';
 import CoinInfo from '../AllCoins/CoinInfo';
+import Favorites from '../Favorites/Favorites';
 
 
 const Main :React.FC = () => {
@@ -25,7 +26,7 @@ const Main :React.FC = () => {
                             <Route path='/allcoins/:page' element={<ListCoins />}/>
                             <Route path='/allcoins/charts/:id' element={<CoinInfo />}/>
                         </Route>
-                        
+                        <Route path='/favorites' element={<Favorites />}/>
                         <Route path='/about' element={<About />}/>
                     </Routes>
                 </Grid>

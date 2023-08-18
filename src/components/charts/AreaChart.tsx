@@ -14,6 +14,8 @@ import { Line } from 'react-chartjs-2';
 import { coinsAPI } from '../../api/api';
 import moment from 'moment';
 import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import ButtonFavorite from './ButtonFavorite';
+import ButtonsExchange from './ButtonsExchange';
 
 ChartJS.register(
     CategoryScale,
@@ -78,15 +80,19 @@ const AreaChart: React.FC<Props> = ({ id }) => {
         <Paper elevation={3}>
             <Grid container p={2} justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <Stack spacing={2} pb={2}>
-                        <Box sx={{width: 'fit-content', border: '3px solid rgb(25, 118, 210)', borderRadius: '28px'}} component={'span'} p={1}>
-                            <Typography variant='h4' width={'auto'}>
+                    <Stack spacing={1} pb={2}>
+                        <Box sx={{ width: 'fit-content', border: '3px solid rgb(25, 118, 210)', borderRadius: '28px' }} component={'span'} p={1}>
+                            <Typography variant='h5' width={'auto'}>
                                 {id}
                             </Typography>
                         </Box>
-                        <Typography variant='h4' gutterBottom>
+                        <Typography variant='h5' gutterBottom>
                             {prices.length && `Текущий курс: ${prices[prices.length - 1][1].toFixed(8)}`}
                         </Typography>
+                        <Stack direction={'row'} gap={2} alignItems={'center'}>
+                            <ButtonFavorite id={id} />
+                            <ButtonsExchange id={id}/>
+                        </Stack>
                     </Stack>
                 </Grid>
                 <Grid item xs={12}>

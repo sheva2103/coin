@@ -58,6 +58,13 @@ const SidebarList: React.FC = () => {
                     <ListItemButton sx={{cursor: 'default', p: 0}}>
                         <ListItem>
                             <Typography variant='h5'>
+                                <NavLink to={'/favorites'} className={selectedLink}>Избранное</NavLink>
+                            </Typography>
+                        </ListItem>
+                    </ListItemButton>
+                    <ListItemButton sx={{cursor: 'default', p: 0}}>
+                        <ListItem>
+                            <Typography variant='h5'>
                                 <NavLink to={'/about'} className={selectedLink}>О нас</NavLink>
                             </Typography>
                         </ListItem>
@@ -76,6 +83,11 @@ const SidebarList: React.FC = () => {
                         <ListItem>
                             <Typography gutterBottom variant='h5'>
                                 <NavLink to={'/allcoins'} className={selectedLink}>Все монеты</NavLink>
+                            </Typography>
+                        </ListItem>
+                        <ListItem>
+                            <Typography gutterBottom variant='h5'>
+                                <NavLink to={'/favorites'} className={selectedLink}>Избранное</NavLink>
                             </Typography>
                         </ListItem>
                         <ListItem>

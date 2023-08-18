@@ -5,7 +5,7 @@ import { Backdrop, CircularProgress, CssBaseline, ThemeProvider } from '@mui/mat
 import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
-import { getAllCoins, getCoin } from './store/allCoins';
+import { ADD, getAllCoins, getCoin, setFavorites } from './store/allCoins';
 import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange, NotificationType, setNotifications } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const loading = useAppSelector(state => state.allCoins.loading)
   const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
   const notification = useAppSelector(state => state.exchange.notification)
+  const favorites = useAppSelector(state => state.allCoins.favorites)
   let isInerval = false
   const theme = useTheme()
 
@@ -45,6 +46,14 @@ const App: React.FC = () => {
       if(notificationsFromLS) {
         const tempArr: NotificationType[] = JSON.parse(notificationsFromLS)
         tempArr.forEach(item => dispatch(setNotifications(item)))
+      }
+    }
+
+    if(favorites.length === 0) {
+      const favoritesFromLS = localStorage.getItem('favorites')
+      if(favoritesFromLS) {
+        const tempArr: string[] = JSON.parse(favoritesFromLS)
+        tempArr.forEach(item => dispatch(setFavorites({type: ADD, id: item})))
       }
     }
 

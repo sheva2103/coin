@@ -3,6 +3,9 @@ import { coinsAPI } from "../api/api";
 import { IExchange, setBuy, setSale } from "./exchangeSlice";
 import { BUY, SALE } from "../components/Home/Exchange";
 
+export const DELETE = 'delete'
+export const ADD = 'add'
+
 export type coins = {
     id: string,
     name: string,
@@ -23,7 +26,8 @@ interface IAllCoins {
     allCoins: string[],
     loading: boolean,
     error: null | string,
-    currentCoin: coin | null
+    currentCoin: coin | null,
+    favorites: string[]
 }
 
 export type coin = {
@@ -47,7 +51,8 @@ const initialState: IAllCoins = {
     allCoins: [],
     loading: false,
     error: null,
-    currentCoin: null
+    currentCoin: null,
+    favorites: []
 }
 
 
@@ -97,7 +102,13 @@ const allCoinsSlice = createSlice({
         },
         setCurrentCoin(state, action: PayloadAction<coin>) {
             state.currentCoin = action.payload
-        }
+        },
+        setFavorites(state, action: PayloadAction<{type: string, id: string}>) {
+            if(action.payload.type === ADD) state.favorites.push(action.payload.id)
+            if(action.payload.type === DELETE) state.favorites = state.favorites.filter(item => item !== action.payload.id)
+            localStorage.setItem('favorites', JSON.stringify(state.favorites))
+        },
+
     },
     extraReducers: (builder) => {
         builder
@@ -141,5 +152,5 @@ const allCoinsSlice = createSlice({
 //     return action.type.endsWith('rejected')
 // }
 
-export const {setLoading} = allCoinsSlice.actions
+export const {setLoading, setFavorites} = allCoinsSlice.actions
 export default allCoinsSlice.reducer

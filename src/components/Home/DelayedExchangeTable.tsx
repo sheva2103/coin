@@ -12,6 +12,7 @@ import { NavLink } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ErrorIcon from '@mui/icons-material/Error';
+import ButtonFavorite from '../charts/ButtonFavorite';
 
 const cardContentStyle = {backgroundColor: 'rgb(102 187 106 / 90%)', '&: hover': {backgroundColor: 'rgb(40 135 45 / 90%)'}, transition: 'all 0.5s', '&: last-child': {pb: '10px'}, position: 'relative'}
 
@@ -77,11 +78,13 @@ const DelayedExchangeTable: FC = () => {
                                         <Typography variant='h6' component={'span'}>Количество: {item.amount}</Typography>
                                         <Typography variant='h6' component={'span'}>Ожидаемая цена: {item.expectedPrice}$</Typography>
                                         <Typography variant='h6' component={'span'}>Тип: {item.type}</Typography>
-                                        <div><DeleteIcon 
-                                                sx={{float: 'right', cursor: 'pointer'}}
+                                        <Stack direction={'row'} justifyContent={'space-between'}>
+                                            <ButtonFavorite id={item.id}/>
+                                            <DeleteIcon 
+                                                sx={{cursor: 'pointer'}}
                                                 onClick={() => dispatch(setDelayedExchange({...item, delete: true}))}
                                                 />
-                                        </div>
+                                        </Stack>
                                     </Stack>
                                     
                             </CardContent>
