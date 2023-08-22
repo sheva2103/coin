@@ -8,6 +8,7 @@ import SidebarList from '../SidebarList/SidebarList';
 import ListCoins from '../AllCoins/ListCoins';
 import CoinInfo from '../AllCoins/CoinInfo';
 import Favorites from '../Favorites/Favorites';
+import BreadcrumbsComponent from '../Breadcrumbs/BreadcrumbsComponent';
 
 
 const Main :React.FC = () => {
@@ -20,13 +21,16 @@ const Main :React.FC = () => {
                         <SidebarList />
                 </Grid>
                 <Grid item xs={true} sx={{height: '100%'}}>
+                    <BreadcrumbsComponent />
                     <Routes>
                         <Route path='/' element={<Home />}/>
-                        <Route path='/allcoins' element={<AllCoins />}>
-                            <Route path='/allcoins/:page' element={<ListCoins />}/>
-                            <Route path='/allcoins/charts/:id' element={<CoinInfo />}/>
+                        <Route path='/allcoins/' element={<AllCoins />}>
+                            <Route path=':page' element={<ListCoins />}/>
+                            <Route path='charts/:id' element={<CoinInfo />}/>
                         </Route>
-                        <Route path='/favorites' element={<Favorites />}/>
+                        <Route path='/favorites/' element={<Favorites />}>
+                            <Route path='charts/:id' element={<CoinInfo />}/>
+                        </Route>
                         <Route path='/about' element={<About />}/>
                     </Routes>
                 </Grid>

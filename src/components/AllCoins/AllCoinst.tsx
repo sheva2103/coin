@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import { Box, PaginationItem, Link as LinkUI, Grid } from '@mui/material';
 import { useAppSelector } from '../../hooks/hook';
 import Pagination from '@mui/material/Pagination';
-import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import List from './List';
 
 
@@ -26,10 +26,14 @@ const AllCoins: React.FC = (props) => {
         scrollToTop()
     }
     const firstPage = coins.slice(0, 100)
+    
+    useEffect(() => {
+        if(!params.page && !params.id) setPage(1)
+    }, [params]);
 
     return (  
         <Box p={2}>
-            {page == 1 && !params.id && <List list={firstPage}/>}
+            { !params.page && !params.id && <List list={firstPage}/>}
             <Outlet />
             {!params.id &&
                     <Pagination 

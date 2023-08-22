@@ -1,6 +1,5 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/hook';
-import { Link as LinkUI, Grid } from '@mui/material';
 import List from './List';
 
 const ListCoins: React.FC = () => {
