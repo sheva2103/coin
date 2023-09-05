@@ -21,6 +21,8 @@ const instance: AxiosInstance = axios.create({
     baseURL: 'https://api.coingecko.com/api/v3/coins/'
 })
 
+//сделать топ100 с таблицей
+
 export const coinsAPI = {
     getAllCoins: () => {
         return instance.get('list')
@@ -30,6 +32,9 @@ export const coinsAPI = {
     },
     getCoinCharts: (id: string) => {
         return instance.get<getCoinCharts>(`${id}/market_chart?vs_currency=usd&days=90`)
+    },
+    getTopListCoin() {
+        return instance.get('markets?vs_currency=usd&order=%20market_cap_asc&per_page=100&page=1&sparkline=false&locale=en')
     }
 }
 

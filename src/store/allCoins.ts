@@ -9,7 +9,11 @@ export const ADD = 'add'
 export type coins = {
     id: string,
     name: string,
-    symbol: string
+    symbol: string,
+    image: string,
+    market_cap: number,
+    market_cap_change_percentage_24h: number,
+    current_price: number
 }
 
 type responseAllCoins = {
@@ -22,12 +26,18 @@ export type responseCoin = {
     status: number
 }
 
+type coinFromTopList = {
+    id: string,
+    image: string
+}
+
 interface IAllCoins {
     allCoins: string[],
     loading: boolean,
     error: null | string,
     currentCoin: coin | null,
-    favorites: string[]
+    favorites: string[],
+    listTopCoins: coins[]
 }
 
 export type coin = {
@@ -52,7 +62,8 @@ const initialState: IAllCoins = {
     loading: false,
     error: null,
     currentCoin: null,
-    favorites: []
+    favorites: [],
+    listTopCoins: []
 }
 
 
@@ -91,6 +102,17 @@ export const getCoin = createAsyncThunk<coin, getCoinType, {rejectValue: string,
             rejectWithValue('Упс, что-то пошло не так... Перезагрузите страницу позже')
         }
     }
+})
+
+export const getListTopCoins = createAsyncThunk<coins[], undefined, {rejectValue: string}>('allCoins/getListTopCoins', async(_, {rejectWithValue}) => {
+    
+    const list: responseAllCoins = await coinsAPI.getTopListCoin()
+    if(!list.data) {
+        console.log(list)
+        rejectWithValue('Упс, что-то пошло не так... Перезагрузите страницу позже99999999999')
+    }
+    return list.data
+
 })
 
 const allCoinsSlice = createSlice({
@@ -140,6 +162,9 @@ const allCoinsSlice = createSlice({
                     state.loading = false
                     state.error = action.payload
                 }
+            })
+            .addCase(getListTopCoins.fulfilled, (state, action: PayloadAction<coins[]>) => {
+                state.listTopCoins = [...action.payload]
             })
             // .addMatcher(isError, (state, action: PayloadAction<string>) => {
             //     state.loading = false

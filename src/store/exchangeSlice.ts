@@ -230,7 +230,7 @@ const exchangeSlice = createSlice({
             // })
             .addMatcher(isError, (state, action: PayloadAction<delayedExchangeType>) => {
                     state.delayedExchange = state.delayedExchange.map(item => (
-                        item.id === action.payload.id ? action.payload : item
+                        item.id === action.payload?.id ? action.payload : item
                     ))
             })
     }

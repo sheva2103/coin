@@ -3,6 +3,7 @@ import Exchange from './Exchange';
 import MyWalletComponent from './MyWallet';
 import { Box } from '@mui/system';
 import DelayedExchangeTable from './DelayedExchangeTable';
+import TopList from '../TopList/TopList';
 
 const Home: React.FC = () => {
     return (  
@@ -10,6 +11,7 @@ const Home: React.FC = () => {
             <Exchange />
             <MyWalletComponent />
             <DelayedExchangeTable />
+            <TopList />
         </Box>
     );
 }

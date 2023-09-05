@@ -5,7 +5,7 @@ import { Backdrop, CircularProgress, CssBaseline, ThemeProvider } from '@mui/mat
 import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
-import { ADD, getAllCoins, getCoin, setFavorites } from './store/allCoins';
+import { ADD, getAllCoins, getCoin, getListTopCoins, setFavorites } from './store/allCoins';
 import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange, NotificationType, setNotifications } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
@@ -16,6 +16,7 @@ const App: React.FC = () => {
 
   const dispatch = useAppDispatch()
   const allCoins = useAppSelector(state => state.allCoins.allCoins)
+  const listTopCoins = useAppSelector(state => state.allCoins.listTopCoins)
   const loading = useAppSelector(state => state.allCoins.loading)
   const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
   const notification = useAppSelector(state => state.exchange.notification)
@@ -30,6 +31,8 @@ const App: React.FC = () => {
 
     if (allCoins.length === 0) dispatch(getAllCoins())
     const myWallet = localStorage.getItem('myWallet')
+
+    if(listTopCoins.length === 0) dispatch(getListTopCoins())
 
     if (!myWallet) {
       dispatch(setMyWallet([{ id: 'usd', amount: 100 }]))
