@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setLoading } from '../../store/allCoins';
 import { setExchange, setAmount } from '../../store/exchangeSlice';
 import { BUY, SALE } from './Exchange';
+import { useTranslate } from '../../hooks/useTranslate';
 
 const ConfirmExhange: React.FC = () => {
 
     const exchange = useAppSelector(state => state.exchange)
     const dispatch = useAppDispatch()
+    const t = useTranslate()
 
     const handleClick = (): void => {
         dispatch(setLoading(true))
@@ -29,7 +31,7 @@ const ConfirmExhange: React.FC = () => {
                 <Card sx={{ minWidth: 275 }}>
                     <CardContent>
                         <Typography gutterBottom variant='h5'>
-                            Подтвердить обмен
+                            {t("confirmExchange")}
                         </Typography>
                         <Button 
                             disabled={exchange.sale.complete === true && exchange.buy.complete === true ? false : true} 

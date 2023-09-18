@@ -6,8 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store';
 import { BrowserRouter } from 'react-router-dom';
+import { Suspense } from 'react';
 
-//import './i18n'
+// i18next не работает (переписывает типы)
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,7 +16,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <Suspense fallback={<div>...loading</div>}>
+        <App />
+      </Suspense>
     </Provider>
   </BrowserRouter>
   

@@ -10,6 +10,7 @@ import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExcha
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
 import CustomizedSnackbars from './components/Snackbars/Snackbars';
+import { useTranslate } from './hooks/useTranslate';
 
 
 const App: React.FC = () => {

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { IExchange, myWalletType, setAmount } from '../../store/exchangeSlice';
 import { getCoin } from '../../store/allCoins';
 import { BUY, SALE } from './Exchange';
+import { useTranslate } from '../../hooks/useTranslate';
 
 
 type ExchangeFormProps = {
@@ -32,6 +33,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
     //const [errorCoin, setErrorCoin] = useState<errorExchange>({isError: false, textError: ''})
     const currentCoinInWallet = useMemo(() => myWallet.find(coin => coin.id === sale.id), [sale.id, myWallet])
     const [focus, setFocus] = useState({sale: false, buy: false})
+    const t = useTranslate()
 
     const coinsForExchange = useMemo(() => {
         if(type === SALE) return myWallet.filter(item => item.id !== buy.id).map(item => item.id)
@@ -75,7 +77,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                     <Typography gutterBottom variant='h5'>
-                        {type}
+                        {t(type)}
                     </Typography>
                     <Grid container alignItems={'start'} spacing={1}>
                         <Grid item xs={12} sm={8}>

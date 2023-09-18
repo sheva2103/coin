@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setDarkTheme } from '../../store/appSlice';
 import { styled } from '@mui/material/styles';
 import flagOfUkraine from '../../images/flags/Ukraine_1474.jpg'
+import { useTranslate } from '../../hooks/useTranslate';
 
 const Item = styled(Stack)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#282828' : 'rgb(22 89 155 / 79%)',
@@ -28,9 +29,10 @@ function BasicAccordion() {
     const toogleDarkMode = (): void => {
         dispatch(setDarkTheme(!darkMode))
     }
-    const [language, setLanguage] = useState('')
+    const [language, setLanguage] = useState(localStorage.getItem('lang') || 'русский')
     const languages = ['english', 'русский', 'українська']
     const [open, setOpen] = React.useState(false);
+    const t = useTranslate()
     const handleClose = () => {
         setOpen(false);
     };
@@ -38,7 +40,9 @@ function BasicAccordion() {
         setOpen(true);
     };
     const handleChange = (event: SelectChangeEvent<typeof language>) => {
+        localStorage.setItem('lang',event.target.value)
         setLanguage(event.target.value);
+        document.location.reload()
     };
 
     return (
@@ -91,5 +95,36 @@ const Settings = () => {
         <BasicAccordion />
     );
 }
+
+
+//////////////////////////////////////////
+const lang = {
+    ru: {
+        text: 'текст',
+        firstText: 'первый текст'
+    },
+    en: {
+        text: 'text',
+        firstText: 'first text'
+    }
+}
+
+type l = {
+    text: string,
+    firstText: string
+}
+
+
+const test = (value: string): string | undefined => {
+
+    const currentLang = lang['ru']
+    let key: keyof l
+
+    for(key in currentLang) {
+        if(key === value) return currentLang[key]
+    }
+}
+console.log(test('firstText'))
+////////////////////////////////////////
 
 export default Settings;

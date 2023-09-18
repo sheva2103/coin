@@ -15,7 +15,7 @@ const TopList = () => {
     const list = useAppSelector(state => state.allCoins.listTopCoins)
 
     return (
-        <Box pl={4} pr={4}>
+        <Box pl={4} pr={4} pb={4}>
             {list.length > 0 &&
                 <Stack gap={2}>
                     <hr style={{ border: '1px dotted rgb(25, 118, 210)' }} />
