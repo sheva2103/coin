@@ -4,13 +4,15 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Switch } from '@mui/material';
+import { Avatar, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Switch, Typography } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setDarkTheme } from '../../store/appSlice';
 import { styled } from '@mui/material/styles';
 import flagOfUkraine from '../../images/flags/Ukraine_1474.jpg'
-import { useTranslate } from '../../hooks/useTranslate';
+import ruFlag from '../../images/flags/ru.png'
+import usaFlag from '../../images/flags/usa.png'
+
 
 const Item = styled(Stack)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#282828' : 'rgb(22 89 155 / 79%)',
@@ -22,6 +24,8 @@ const Item = styled(Stack)(({ theme }) => ({
     marginBottom: '4px'
 }));
 
+const languages1 = [{lang: 'english', flag: usaFlag}, {lang: 'русский', flag: ruFlag}, {lang: 'українська', flag: flagOfUkraine}]
+
 function BasicAccordion() {
 
     const darkMode = useAppSelector(state => state.app.darkTheme)
@@ -30,9 +34,7 @@ function BasicAccordion() {
         dispatch(setDarkTheme(!darkMode))
     }
     const [language, setLanguage] = useState(localStorage.getItem('lang') || 'русский')
-    const languages = ['english', 'русский', 'українська']
     const [open, setOpen] = React.useState(false);
-    const t = useTranslate()
     const handleClose = () => {
         setOpen(false);
     };
@@ -47,7 +49,7 @@ function BasicAccordion() {
 
     return (
         <div>
-            <Accordion sx={{ backgroundColor: 'inherit', color: 'inherit' }}>
+            <Accordion sx={{ backgroundColor: darkMode ? 'inherit' : 'rgb(47 140 233)', color: 'inherit' }}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -72,11 +74,11 @@ function BasicAccordion() {
                                 onClose={handleClose}
                                 onOpen={handleOpen}
                             >
-                                {languages.map(item => (
-                                    <MenuItem key={item} value={item}>
+                                {languages1.map(item => (
+                                    <MenuItem key={item.lang} value={item.lang}>
                                         <Stack direction={'row'} gap={1}>
-                                            <Avatar sx={{ width: 20, height: 20 }} alt={item} src={flagOfUkraine} />
-                                            {item}
+                                            <Avatar sx={{ width: 20, height: 20 }} alt={item.lang} src={item.flag} />
+                                            <Typography variant='body1'>{item.lang}</Typography>
                                         </Stack>
                                     </MenuItem>
                                 ))}
@@ -95,36 +97,5 @@ const Settings = () => {
         <BasicAccordion />
     );
 }
-
-
-//////////////////////////////////////////
-const lang = {
-    ru: {
-        text: 'текст',
-        firstText: 'первый текст'
-    },
-    en: {
-        text: 'text',
-        firstText: 'first text'
-    }
-}
-
-type l = {
-    text: string,
-    firstText: string
-}
-
-
-const test = (value: string): string | undefined => {
-
-    const currentLang = lang['ru']
-    let key: keyof l
-
-    for(key in currentLang) {
-        if(key === value) return currentLang[key]
-    }
-}
-console.log(test('firstText'))
-////////////////////////////////////////
 
 export default Settings;
