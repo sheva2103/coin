@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setMobileMenu } from '../../store/appSlice';
 import Settings from './Settings';
+import { useTranslate } from '../../hooks/useTranslate';
 
 
 //вынести сюда дарк мод которы будет прятаться в слайдер
@@ -32,6 +33,7 @@ const SidebarList: React.FC = () => {
 
     const mobileMenuIsOpen = useAppSelector(state => state.app.mobileMenuIsOpen)
     const dispatch = useAppDispatch()
+    const t = useTranslate()
     const selectedLink = ({isActive}: IActive): any => isActive ? style.activeLink : ""
     const closeMenu = (): void => {
         dispatch(setMobileMenu(false))
@@ -44,28 +46,28 @@ const SidebarList: React.FC = () => {
                     <ListItemButton sx={{cursor: 'default', p: 0}}>
                         <ListItem>
                             <Typography variant='h5'>
-                                <NavLink to={'/'} className={selectedLink}>Главная</NavLink>
+                                <NavLink to={'/'} className={selectedLink}>{t('home')}</NavLink>
                             </Typography>
                         </ListItem>
                     </ListItemButton>
                     <ListItemButton sx={{cursor: 'default', p: 0}}>
                         <ListItem>
                             <Typography variant='h5'>
-                                <NavLink to={'/allcoins'} className={selectedLink}>Все монеты</NavLink>
+                                <NavLink to={'/allcoins'} className={selectedLink}>{t('allCoins')}</NavLink>
                             </Typography>
                         </ListItem>
                     </ListItemButton>
                     <ListItemButton sx={{cursor: 'default', p: 0}}>
                         <ListItem>
                             <Typography variant='h5'>
-                                <NavLink to={'/favorites'} className={selectedLink}>Избранное</NavLink>
+                                <NavLink to={'/favorites'} className={selectedLink}>{t('favorites')}</NavLink>
                             </Typography>
                         </ListItem>
                     </ListItemButton>
                     <ListItemButton sx={{cursor: 'default', p: 0}}>
                         <ListItem>
                             <Typography variant='h5'>
-                                <NavLink to={'/about'} className={selectedLink}>О нас</NavLink>
+                                <NavLink to={'/about'} className={selectedLink}>{t('about')}</NavLink>
                             </Typography>
                         </ListItem>
                     </ListItemButton>
@@ -77,22 +79,22 @@ const SidebarList: React.FC = () => {
                     <List sx={{'& a': {textDecoration: 'none', color: 'inherit'}}} onClick={closeMenu}>
                         <ListItem>
                             <Typography gutterBottom variant='h5'>
-                                <NavLink to={'/'} className={selectedLink}>Главная</NavLink>
+                                <NavLink to={'/'} className={selectedLink}>{t('home')}</NavLink>
                             </Typography>
                         </ListItem>
                         <ListItem>
                             <Typography gutterBottom variant='h5'>
-                                <NavLink to={'/allcoins'} className={selectedLink}>Все монеты</NavLink>
+                                <NavLink to={'/allcoins'} className={selectedLink}>{t('allCoins')}</NavLink>
                             </Typography>
                         </ListItem>
                         <ListItem>
                             <Typography gutterBottom variant='h5'>
-                                <NavLink to={'/favorites'} className={selectedLink}>Избранное</NavLink>
+                                <NavLink to={'/favorites'} className={selectedLink}>{t('favorites')}</NavLink>
                             </Typography>
                         </ListItem>
                         <ListItem>
                             <Typography gutterBottom variant='h5'>
-                                <NavLink to={'/about'} className={selectedLink}>О нас</NavLink>
+                                <NavLink to={'/about'} className={selectedLink}>{t('about')}</NavLink>
                             </Typography>
                         </ListItem>
                     </List>

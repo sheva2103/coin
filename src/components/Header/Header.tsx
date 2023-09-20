@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setDarkTheme, setMobileMenu, setModal } from '../../store/appSlice';
 import { REPLENISHMENT } from '../Modal/TransitionsModal';
 import BasicMenuNotifications from '../Notifications/Notifications';
+import { useTranslate } from '../../hooks/useTranslate';
 
 interface IHeaderProps {
     // darkMode: boolean,
@@ -21,6 +22,7 @@ const Header: React.FC<IHeaderProps> = () => {
 
     const dispatch = useAppDispatch()
     const darkMode = useAppSelector(state => state.app.darkTheme)
+    const t = useTranslate()
     const mobileMenuIsOpen = useAppSelector(state => state.app.mobileMenuIsOpen)
     const toogleDarkMode = (): void => {
         dispatch(setDarkTheme(!darkMode))
@@ -39,7 +41,7 @@ const Header: React.FC<IHeaderProps> = () => {
                         </Grid>
                         <Grid item xs={'auto'}>
                             <Stack direction={'row'} spacing={1} sx={{alignItems: 'center'}}>
-                                <Button variant="contained" color="success" onClick={() => dispatch(setModal({isOpen: true, type: REPLENISHMENT}))}>Пополнить счёт</Button>
+                                <Button variant="contained" color="success" onClick={() => dispatch(setModal({isOpen: true, type: REPLENISHMENT}))}>{t('replenishmentAccount')}</Button>
                                 <BasicMenuNotifications />
                                 {/* <Stack direction={'row'} sx={{alignItems: 'center'}}>
                                     <Switch checked={darkMode} onChange={ toogleDarkMode } />

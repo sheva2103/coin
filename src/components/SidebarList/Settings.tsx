@@ -4,7 +4,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Switch, Typography } from '@mui/material';
+import { Avatar, Button, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Switch, Typography } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { setDarkTheme } from '../../store/appSlice';
@@ -12,6 +12,8 @@ import { styled } from '@mui/material/styles';
 import flagOfUkraine from '../../images/flags/Ukraine_1474.jpg'
 import ruFlag from '../../images/flags/ru.png'
 import usaFlag from '../../images/flags/usa.png'
+import { clearNotifications } from '../../store/exchangeSlice';
+import { useTranslate } from '../../hooks/useTranslate';
 
 
 const Item = styled(Stack)(({ theme }) => ({
@@ -21,7 +23,8 @@ const Item = styled(Stack)(({ theme }) => ({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: '24px',
-    marginBottom: '4px'
+    marginBottom: '4px',
+    justifyContent: 'center'
 }));
 
 const languages1 = [{lang: 'english', flag: usaFlag}, {lang: 'русский', flag: ruFlag}, {lang: 'українська', flag: flagOfUkraine}]
@@ -30,6 +33,7 @@ function BasicAccordion() {
 
     const darkMode = useAppSelector(state => state.app.darkTheme)
     const dispatch = useAppDispatch()
+    const t = useTranslate()
     const toogleDarkMode = (): void => {
         dispatch(setDarkTheme(!darkMode))
     }
@@ -46,6 +50,9 @@ function BasicAccordion() {
         setLanguage(event.target.value);
         document.location.reload()
     };
+    const clearNotificationsList = () => {
+        dispatch(clearNotifications())
+    }
 
     return (
         <div>
@@ -84,6 +91,15 @@ function BasicAccordion() {
                                 ))}
                             </Select>
                         </FormControl>
+                    </Item>
+                    <Item>
+                        <Button variant="text"
+                                size="small" 
+                                sx={{borderRadius: '24px', m: 1, color: 'white'}}
+                                onClick={clearNotificationsList}
+                                >
+                                {t('clearNotifications')}
+                        </Button>
                     </Item>
                 </AccordionDetails>
             </Accordion>

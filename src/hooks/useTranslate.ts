@@ -30,7 +30,10 @@ type lang = {
     minPrice90Day: string,
     maxPrice90Day: string,
     addToFavorites: string,
-    moreInformation: string
+    removeFromFavorites: string,
+    moreInformation: string,
+    clearNotifications: string,
+    replenishmentUsdWallet: string
 }
 
 
@@ -38,15 +41,15 @@ export const useTranslate = () => {
 
     const currentLangFromLS = localStorage.getItem('lang')
 
-    const t = (value: string): string | undefined => {
+    const t = (value: string): string => {
         let currentLang = ruLang
         if(currentLangFromLS === 'english') currentLang = enLang
         if(currentLangFromLS === 'українська') currentLang = uaLang
         let key: keyof lang    
         for(key in currentLang) {
-            if(key === value) return currentLang[key]
+            if(key.toLowerCase() === value.toLocaleLowerCase()) return currentLang[key]
         }
-        
+        return value
     }
     return t
 }

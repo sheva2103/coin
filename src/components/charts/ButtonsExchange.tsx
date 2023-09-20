@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { useNavigate } from "react-router-dom";
 import { getCoin } from "../../store/allCoins";
 import { BUY, SALE } from "../Home/Exchange";
+import { useTranslate } from "../../hooks/useTranslate";
 
 type Props = {
     id: string
@@ -13,6 +14,7 @@ const ButtonsExchange: React.FC<Props> = ({ id }) => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const t = useTranslate()
     const currentCoinInVallet = useAppSelector(state => state.exchange.myWallet.find(item => item.id === id))
     const handleClick = (type: string) => {
         dispatch(getCoin({ type, id }))
@@ -24,13 +26,13 @@ const ButtonsExchange: React.FC<Props> = ({ id }) => {
             <Button variant="contained"
                 sx={{ borderRadius: '24px' }}
                 onClick={() => handleClick(BUY)}>
-                    Купить
+                    {t('buy')}
             </Button>
             {currentCoinInVallet &&
                 <Button variant="contained"
                     sx={{ borderRadius: '24px' }}
                     onClick={() => handleClick(SALE)}>
-                        Продать
+                        {t('sale')}
                 </Button>}
         </>
     );

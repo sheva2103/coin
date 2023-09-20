@@ -87,7 +87,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
                                 options={coinsForExchange}
                                 sx={{ width: "100%" }}
                                 renderInput={(params) => <TextField {...params}
-                                                            label="Выбрать" 
+                                                            label={t('select')} 
                                                             required
                                                             onFocus={() => setFocus({...focus, [type]: true})}
                                                             onBlur={() => setFocus({...focus, [type]: false})}
@@ -102,7 +102,7 @@ const ExchangeElement: React.FC<ExchangeFormProps> = ({type}) => {
                                 helperText={errorAmount.textError}
                                 disabled={!!sale.id && !!buy.id ? false : true}
                                 id="outlined-basic" 
-                                label="Сумма" 
+                                label={t('sum')}
                                 variant="outlined" 
                                 required 
                                 value={type === SALE ? sale.amount : buy.amount} 

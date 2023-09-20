@@ -4,6 +4,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useTranslate } from '../../hooks/useTranslate';
 
 type Props = {
     value: string | null,
@@ -17,10 +18,11 @@ const ControlledRadioButtonsGroup: React.FC<Props> = ({value, setValue, setCoin}
         setValue((event.target as HTMLInputElement).value);
         setCoin(null)
     };
+    const t = useTranslate()
 
     return (
         <FormControl>
-        <FormLabel id="demo-controlled-radio-buttons-group">Назначение</FormLabel>
+        <FormLabel id="demo-controlled-radio-buttons-group">{t('type')}</FormLabel>
         <RadioGroup
             row
             aria-labelledby="demo-controlled-radio-buttons-group"
@@ -28,8 +30,8 @@ const ControlledRadioButtonsGroup: React.FC<Props> = ({value, setValue, setCoin}
             value={value}
             onChange={handleChange}
         >
-            <FormControlLabel value="sale" control={<Radio />} label="sale" />
-            <FormControlLabel value="buy" control={<Radio />} label="buy" />
+            <FormControlLabel value="sale" control={<Radio />} label={t('sale')} />
+            <FormControlLabel value="buy" control={<Radio />} label={t('buy')} />
         </RadioGroup>
         </FormControl>
     );

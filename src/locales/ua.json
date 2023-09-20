@@ -25,5 +25,8 @@
     "minPrice90Day": "Мін. ціна за 90 днів",
     "maxPrice90Day": "Макс. ціна за 90 днів",
     "addToFavorites": "Додати до обраного",
-    "moreInformation": "Більше інформації"
+    "removeFromFavorites": "Видалити з обраного",
+    "moreInformation": "Більше інформації",
+    "clearNotifications": "очистити повідомлення",
+    "replenishmentUsdWallet": "Поповнити USD гаманець"
 }

@@ -5,12 +5,11 @@ import { Backdrop, CircularProgress, CssBaseline, ThemeProvider } from '@mui/mat
 import Main from './components/Main/Main';
 import { useTheme } from './theme';
 import { useAppDispatch, useAppSelector } from './hooks/hook';
-import { ADD, getAllCoins, getCoin, getListTopCoins, setFavorites } from './store/allCoins';
+import { ADD, getAllCoins, getListTopCoins, setFavorites } from './store/allCoins';
 import { setDelayedExchange, delayedExchangeType, setMyWallet, checkDelayedExchange, NotificationType, setNotifications } from './store/exchangeSlice';
 import TransitionsModal from './components/Modal/TransitionsModal';
 import { setDarkTheme } from './store/appSlice';
 import CustomizedSnackbars from './components/Snackbars/Snackbars';
-import { useTranslate } from './hooks/useTranslate';
 
 
 const App: React.FC = () => {
@@ -22,7 +21,6 @@ const App: React.FC = () => {
   const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
   const notification = useAppSelector(state => state.exchange.notification)
   const favorites = useAppSelector(state => state.allCoins.favorites)
-  let isInerval = false
   const theme = useTheme()
 
   useEffect(() => {
@@ -67,13 +65,13 @@ const App: React.FC = () => {
 
     const interval = setInterval(() => {
       if (delayedExchange.length === 0) clearInterval(interval)
-      console.log('interval', isInerval, delayedExchange)
+      console.log('interval', delayedExchange)
       delayedExchange.forEach(item => {
         dispatch(checkDelayedExchange(item.id))
       })
     }, 10000)
     return () => clearInterval(interval)
-  }, [delayedExchange])
+  }, [delayedExchange, dispatch])
 
   return (
     <>

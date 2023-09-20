@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ErrorIcon from '@mui/icons-material/Error';
 import ButtonFavorite from '../charts/ButtonFavorite';
+import { useTranslate } from '../../hooks/useTranslate';
 
 const cardContentStyle = {backgroundColor: 'rgb(102 187 106 / 90%)', '&: hover': {backgroundColor: 'rgb(40 135 45 / 90%)'}, transition: 'all 0.5s', '&: last-child': {pb: '10px'}, position: 'relative'}
 
@@ -56,6 +57,7 @@ const DelayedExchangeTable: FC = () => {
 
     const dispatch = useAppDispatch()
     const listDelayedExchange = useAppSelector(state => state.exchange.delayedExchange)
+    const t = useTranslate()
 
     return (  
         <Box p={4}>
@@ -63,7 +65,7 @@ const DelayedExchangeTable: FC = () => {
             <Button variant="contained" 
                     sx={{margin: '16px 0'}}
                     onClick={() => dispatch(setModal({isOpen: true, type: DELAYED_EXCHANGE}))}
-                    >Запланировать обмен
+                    >{t('delayedExchange')}
             </Button>
             <Grid container direction={'row'} gap={2}>
                 {listDelayedExchange.map(item => (
@@ -75,9 +77,9 @@ const DelayedExchangeTable: FC = () => {
                                         <Typography variant='h6' component={'span'}>
                                             <NavLink to={`/allcoins/charts/${item.id}`}>{item.id}</NavLink>
                                         </Typography>
-                                        <Typography variant='h6' component={'span'}>Количество: {item.amount}</Typography>
-                                        <Typography variant='h6' component={'span'}>Ожидаемая цена: {item.expectedPrice}$</Typography>
-                                        <Typography variant='h6' component={'span'}>Тип: {item.type}</Typography>
+                                        <Typography variant='h6' component={'span'}>{t('quantity')}: {item.amount}</Typography>
+                                        <Typography variant='h6' component={'span'}>{t('expectedPriceMin')}: {item.expectedPrice}$</Typography>
+                                        <Typography variant='h6' component={'span'}>{t('type')}: {t(item.type)}</Typography>
                                         <Stack direction={'row'} justifyContent={'space-between'}>
                                             <ButtonFavorite id={item.id}/>
                                             <DeleteIcon 

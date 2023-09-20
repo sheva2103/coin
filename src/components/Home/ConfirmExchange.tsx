@@ -38,7 +38,7 @@ const ConfirmExhange: React.FC = () => {
                             variant="contained"
                             onClick={handleClick}
                             >
-                                Подтвердить
+                            {t('confirm')}
                         </Button>
                     </CardContent>
                 </Card>

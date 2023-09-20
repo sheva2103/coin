@@ -6,9 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { SALE } from '../Home/Exchange';
 import { myWalletType, setDelayedExchange } from '../../store/exchangeSlice';
-import { coin, setLoading } from '../../store/allCoins';
+import { setLoading } from '../../store/allCoins';
 import { coinsAPI } from '../../api/api';
-import { AxiosResponse } from 'axios';
+import { useTranslate } from '../../hooks/useTranslate';
 
 type DelayedExchangeModalType = {
     handleClose: () => void
@@ -25,6 +25,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
     const allCoins = useAppSelector(state => state.allCoins.allCoins)
     const delayedExchange = useAppSelector(state => state.exchange.delayedExchange)
     const dispatch = useAppDispatch()
+    const t = useTranslate()
 
     const [type, setType] = React.useState<string | null>(SALE);
     const [coin, setCoin] = React.useState<string | null>(null);
@@ -73,7 +74,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 options={type === SALE ? listCoinFromWallet : allCoins}
                 sx={{ width: 'auto' }}
                 renderInput={(params) => <TextField {...params} 
-                                                    label="Выбрать" 
+                                                    label={t('select')} 
                                                     error={isDisabled.state}
                                                     helperText={isDisabled.text}
                                                     />}
@@ -82,7 +83,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 value={price}
                 onChange={(e) => +e.target.value >= 0 && setPrice(e.target.value)}
                 id="outlined-number"
-                label={type === SALE ? "Ожидаемая минимальная цена" : "Ожидаемая максимальная цена"}
+                label={type === SALE ? t('expectedPriceMin') : t('expectedPriceMax')}
                 type="number"
                 InputLabelProps={{
                     shrink: true,
@@ -93,7 +94,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 value={amount}
                 onChange={(e) => +e.target.value >= 0 && setAmount(e.target.value)}
                 id="outlined-number"
-                label="Количество"
+                label={t('quantity')}
                 type="number"
                 InputLabelProps={{
                     shrink: true,
@@ -107,7 +108,7 @@ const DelayedExchangeModal: React.FC<DelayedExchangeModalType> = ({handleClose})
                 onClick={addExchange}
                 //disabled={type === SALE && currentCoinFromWallet && currentCoinFromWallet?.amount < +amount}
                 disabled={isDisabled.state}
-                >Подтвердить
+                >{t('confirm')}
             </Button>
         </Stack>
     );

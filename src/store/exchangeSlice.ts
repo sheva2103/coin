@@ -207,6 +207,9 @@ const exchangeSlice = createSlice({
         },
         setNotifications(state, action: PayloadAction<NotificationType>) {
             state.notification.push(action.payload)
+        },
+        clearNotifications(state) {
+            state.notification = []
         }
     },
     extraReducers: (builder) => {
@@ -240,5 +243,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected')
 }
 
-export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange, notificationsChecked, setNotifications} = exchangeSlice.actions
+export const {setSale, setBuy, setAmount, setExchange, setMyWallet, updateMyWallet, setDelayedExchange, notificationsChecked, setNotifications, clearNotifications} = exchangeSlice.actions
 export default exchangeSlice.reducer

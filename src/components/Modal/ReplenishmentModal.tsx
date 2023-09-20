@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { useAppDispatch } from '../../hooks/hook';
 import { updateMyWallet } from '../../store/exchangeSlice';
 import { setLoading } from '../../store/allCoins';
+import { useTranslate } from '../../hooks/useTranslate';
 
 type Props = {
     handleClose: () => void
@@ -15,6 +16,7 @@ const ReplenishmentModal: FC<Props> = ({handleClose}) => {
 
     const [amount, setAmount] = React.useState<number | string>('')
     const dispatch = useAppDispatch()
+    const t = useTranslate()
     const addMoney = () => {
         if(+amount > 0) {
             dispatch(setLoading(true))
@@ -29,7 +31,7 @@ const ReplenishmentModal: FC<Props> = ({handleClose}) => {
     return ( 
         <Stack direction={'column'} spacing={2}>
                 <Typography id="transition-modal-title" variant="h6" component="h2">
-                    Пополнить usd кошелёк
+                    {t('replenishmentUsdWallet')}
                 </Typography>
                     <TextField 
                         type='number'
@@ -40,7 +42,7 @@ const ReplenishmentModal: FC<Props> = ({handleClose}) => {
                     <Button 
                         variant="contained"
                         onClick={addMoney}
-                        >Добавить
+                        >{t('replenishmentAccount')}
                     </Button>
         </Stack>
     );

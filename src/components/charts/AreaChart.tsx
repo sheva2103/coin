@@ -18,6 +18,7 @@ import ButtonFavorite from './ButtonFavorite';
 import ButtonsExchange from './ButtonsExchange';
 import { useAppDispatch } from '../../hooks/hook';
 import { setLoading } from '../../store/allCoins';
+import { useTranslate } from '../../hooks/useTranslate';
 
 ChartJS.register(
     CategoryScale,
@@ -60,13 +61,14 @@ const AreaChart: React.FC<Props> = ({ id }) => {
     const [prices, setPrices] = useState<number[][]>([])
     const maxMinPrice = [...prices].sort((a, b) => a[1] - b[1])
     const dispatch = useAppDispatch()
+    const t = useTranslate()
 
     const data = {
         labels: prices.map(item => moment(item[0]).format('DD.MM.YY')),
         datasets: [
             {
                 fill: true,
-                label: 'Цена',
+                label: t('price'),
                 data: prices.filter(item => item[1]),
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -97,14 +99,14 @@ const AreaChart: React.FC<Props> = ({ id }) => {
                             </Typography>
                         </Box>
                         <Typography variant='h6' gutterBottom>
-                            {prices.length && `Текущий курс: ${prices[prices.length - 1][1].toFixed(8)}`}
+                            {prices.length && `${t('currentPrice')}: ${prices[prices.length - 1][1].toFixed(8)}$`}
                         </Typography>
                         {maxMinPrice.length &&
                             <Box pb={1}>
-                                <Typography variant='body1'>Мин.цена за 90 дней: 
+                                <Typography variant='body1'>{t('minPrice90Day')}: 
                                     <Typography component={'span'} sx={{color: 'rgb(25, 118, 210)'}}>  {maxMinPrice[0][1].toFixed(8)}$</Typography>
                                 </Typography>
-                                <Typography variant='body1'>Макс.цена за 90 дней: 
+                                <Typography variant='body1'>{t('maxPrice90Day')}: 
                                     <Typography component={'span'} sx={{color: 'rgb(25, 118, 210)'}}>  {maxMinPrice[maxMinPrice.length - 1][1].toFixed(8)}$</Typography>
                                 </Typography>
                             </Box>
@@ -113,7 +115,7 @@ const AreaChart: React.FC<Props> = ({ id }) => {
                             <ButtonFavorite id={id} />
                             <ButtonsExchange id={id} />
                         </Stack>
-                        <Link href={`https://www.coingecko.com/en/coins/${id}`}>Больше информации</Link>
+                        <Link href={`https://www.coingecko.com/en/coins/${id}`}>{t('moreInformation')}</Link>
                     </Stack>
                 </Grid>
                 <Grid item xs={12} lg={8}>

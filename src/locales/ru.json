@@ -11,7 +11,7 @@
     "price": "цена",
     "change24h": "Изменение за 24ч",
     "marketCap": " Капитализация",
-    "quantity": "количество",
+    "quantity": "Количество",
     "expectedPriceMin": "Ожидаемая минимальная цена",
     "expectedPriceMax": "Ожидаемая максимальная цена",
     "type": "Тип",
@@ -25,5 +25,8 @@
     "minPrice90Day": "Мин.цена за 90 дней",
     "maxPrice90Day": "Макс.цена за 90 дней",
     "addToFavorites": "Добавить в избранное",
-    "moreInformation": "Больше информации"
+    "removeFromFavorites": "Remove from favorites",
+    "moreInformation": "Больше информации",
+    "clearNotifications": "Очистить уведомления",
+    "replenishmentUsdWallet": "Пополнить USD кошелёк"
 }
