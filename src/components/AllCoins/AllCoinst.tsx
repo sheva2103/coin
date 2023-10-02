@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
-import { Box, PaginationItem, Link as LinkUI, Grid } from '@mui/material';
+import { Box, PaginationItem, Link as LinkUI } from '@mui/material';
 import { useAppSelector } from '../../hooks/hook';
 import Pagination from '@mui/material/Pagination';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import List from './List';
+import ButtonScrollTop from './ButtonScrollTop';
 
 
-function scrollToTop() {
+export function scrollToTop() {
     const c = document.documentElement.scrollTop || document.body.scrollTop;
     if (c > 0) {
         window.requestAnimationFrame(scrollToTop);
@@ -32,7 +33,8 @@ const AllCoins: React.FC = (props) => {
     }, [params]);
 
     return (  
-        <Box p={2}>
+        <Box p={2} position={'relative'}>
+            <ButtonScrollTop />
             { !params.page && !params.id && <List list={firstPage}/>}
             <Outlet />
             {!params.id &&

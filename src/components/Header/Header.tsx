@@ -4,10 +4,9 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, Grid, Stack, Switch } from '@mui/material';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
-import { setDarkTheme, setMobileMenu, setModal } from '../../store/appSlice';
+import { setMobileMenu, setModal } from '../../store/appSlice';
 import { REPLENISHMENT } from '../Modal/TransitionsModal';
 import BasicMenuNotifications from '../Notifications/Notifications';
 import { useTranslate } from '../../hooks/useTranslate';
@@ -21,32 +20,26 @@ interface IHeaderProps {
 const Header: React.FC<IHeaderProps> = () => {
 
     const dispatch = useAppDispatch()
-    const darkMode = useAppSelector(state => state.app.darkTheme)
     const t = useTranslate()
     const mobileMenuIsOpen = useAppSelector(state => state.app.mobileMenuIsOpen)
-    const toogleDarkMode = (): void => {
-        dispatch(setDarkTheme(!darkMode))
-    }
     const openMobileMenu = (): void => {
         dispatch(setMobileMenu(!mobileMenuIsOpen))
     }
 
     return (
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+            <Box sx={{ flexGrow: 1, height: '64px' }}>
+                <AppBar position="fixed">
                 <Toolbar>
                     <Grid container>
                         <Grid item xs={true}>
-
+                            <Typography variant='h5' component={'h2'} sx={{display: {xs:'none', sm: 'block'}}}>
+                                CoinExchange
+                            </Typography>
                         </Grid>
                         <Grid item xs={'auto'}>
                             <Stack direction={'row'} spacing={1} sx={{alignItems: 'center'}}>
                                 <Button variant="contained" color="success" onClick={() => dispatch(setModal({isOpen: true, type: REPLENISHMENT}))}>{t('replenishmentAccount')}</Button>
                                 <BasicMenuNotifications />
-                                {/* <Stack direction={'row'} sx={{alignItems: 'center'}}>
-                                    <Switch checked={darkMode} onChange={ toogleDarkMode } />
-                                    <DarkModeIcon />
-                                </Stack> */}
                                 <IconButton
                                     size="large"
                                     edge="start"

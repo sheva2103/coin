@@ -1,4 +1,4 @@
-import { AnyAction, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { coinsAPI } from "../api/api";
 import { IExchange, setBuy, setSale } from "./exchangeSlice";
 import { BUY, SALE } from "../components/Home/Exchange";
@@ -26,10 +26,6 @@ export type responseCoin = {
     status: number
 }
 
-type coinFromTopList = {
-    id: string,
-    image: string
-}
 
 interface IAllCoins {
     allCoins: string[],

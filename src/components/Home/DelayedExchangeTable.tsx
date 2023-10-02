@@ -9,13 +9,12 @@ import { DELAYED_EXCHANGE } from '../Modal/TransitionsModal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { setDelayedExchange } from '../../store/exchangeSlice';
 import { NavLink } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ErrorIcon from '@mui/icons-material/Error';
 import ButtonFavorite from '../charts/ButtonFavorite';
 import { useTranslate } from '../../hooks/useTranslate';
 
-const cardContentStyle = {backgroundColor: 'rgb(102 187 106 / 90%)', '&: hover': {backgroundColor: 'rgb(40 135 45 / 90%)'}, transition: 'all 0.5s', '&: last-child': {pb: '10px'}, position: 'relative'}
+const cardContentStyle = {backgroundColor: 'rgb(102 187 106 / 90%)', '&: hover': {backgroundColor: 'rgb(40 135 45 / 90%)'}, transition: 'all 0.5s', '&: last-child': {pb: '10px'}, position: 'relative', height: '100%'}
 
 // const Item = styled(Card)(({ theme }) => ({
 //     background: `url("https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579") 50%/cover no-repeat;`,
@@ -32,9 +31,10 @@ const Item: React.FC<{img: string, children: ReactNode}> = ({img, children}) => 
         background: `url("${img}") 50%/cover no-repeat;`,
         color: theme.palette.text.secondary,
         borderRadius: '16px',
-        maxWidth: 345,
+        width: 300,
         boxShadow: '7px 7px 11px -4px rgba(84,88,94,1)',
-        '& a': {textDecoration: 'none',color: 'rgb(10 74 137)'}
+        '& a': {textDecoration: 'none',color: 'rgb(10 74 137)'},
+        height: '100%'
     }));
     return (
         <CardItem>
@@ -69,17 +69,19 @@ const DelayedExchangeTable: FC = () => {
             </Button>
             <Grid container direction={'row'} gap={2}>
                 {listDelayedExchange.map(item => (
-                    <Grid key={item.id + item.type} item xs={12} sm={4} md={3} lg={2}>
+                    <Grid key={item.id + item.type} item>
                         <Item img={item.img}>
                             <CardContent sx={cardContentStyle}>
                                 {item.error && <BasicTooltip />}
-                                    <Stack spacing={1}>
-                                        <Typography variant='h6' component={'span'}>
-                                            <NavLink to={`/allcoins/charts/${item.id}`}>{item.id}</NavLink>
-                                        </Typography>
-                                        <Typography variant='h6' component={'span'}>{t('quantity')}: {item.amount}</Typography>
-                                        <Typography variant='h6' component={'span'}>{t('expectedPriceMin')}: {item.expectedPrice}$</Typography>
-                                        <Typography variant='h6' component={'span'}>{t('type')}: {t(item.type)}</Typography>
+                                    <Stack spacing={1} direction={'column'} justifyContent={'space-between'} height={'100%'}>
+                                        <Stack direction={'column'}>
+                                            <Typography variant='h6' component={'span'}>
+                                                <NavLink to={`/allcoins/charts/${item.id}`}>{item.id}</NavLink>
+                                            </Typography>
+                                            <Typography variant='h6' component={'span'}>{t('quantity')}: {item.amount}</Typography>
+                                            <Typography variant='h6' component={'span'}>{t('expectedPriceMin')}: {item.expectedPrice}$</Typography>
+                                            <Typography variant='h6' component={'span'}>{t('type')}: {t(item.type)}</Typography>
+                                        </Stack>
                                         <Stack direction={'row'} justifyContent={'space-between'}>
                                             <ButtonFavorite id={item.id}/>
                                             <DeleteIcon 

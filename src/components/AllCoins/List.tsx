@@ -9,7 +9,7 @@ type Props = {
     list: string[]
 }
 
-export const LinkMUI: FC<{link: string, name: string}> = ({link, name}) => {
+export const LinkMUI: FC<{ link: string, name: string }> = ({ link, name }) => {
 
     const navigate = useNavigate()
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -17,21 +17,23 @@ export const LinkMUI: FC<{link: string, name: string}> = ({link, name}) => {
         navigate(link)
     }
 
-    return(
-            <Link underline="hover" href={link} onClick={handleClick}>{name}</Link>
+    return (
+        <Link underline="hover" href={link} onClick={handleClick}>{name}</Link>
     )
 }
 
 const List: FC<Props> = ({ link, list }) => {
     return (
-        <Grid container item xs={11} md={9} lg={8} sx={{ m: '0 auto' }}>
-            {list.map(item => (
-                <Grid item key={item} width={'200px'} p={2}>
-                    {/* {<NavLink to={`${link ? link : ""}charts/${item}`}>{item}</NavLink>} */}
-                    <LinkMUI link={`${link ? link : ""}charts/${item}`} name={item}/>
-                </Grid>
-            ))}
-        </Grid>
+        <Box>
+            <Grid container item xs={11} md={9} lg={8} sx={{ m: '0 auto' }}>
+                {list.map(item => (
+                    <Grid item key={item} width={'200px'} p={2}>
+                        {/* {<NavLink to={`${link ? link : ""}charts/${item}`}>{item}</NavLink>} */}
+                        <LinkMUI link={`${link ? link : ""}charts/${item}`} name={item} />
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
     );
 }
 
