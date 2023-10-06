@@ -37,7 +37,7 @@ function BasicAccordion() {
     const toogleDarkMode = (): void => {
         dispatch(setDarkTheme(!darkMode))
     }
-    const [language, setLanguage] = useState(localStorage.getItem('lang') || 'русский')
+    const [language, setLanguage] = useState(localStorage.getItem('lang') || 'українська')
     const [open, setOpen] = React.useState(false);
     const handleClose = () => {
         setOpen(false);

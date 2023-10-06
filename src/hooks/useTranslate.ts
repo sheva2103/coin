@@ -42,9 +42,9 @@ export const useTranslate = () => {
     const currentLangFromLS = localStorage.getItem('lang')
 
     const t = (value: string): string => {
-        let currentLang = ruLang
+        let currentLang = uaLang
         if(currentLangFromLS === 'english') currentLang = enLang
-        if(currentLangFromLS === 'українська') currentLang = uaLang
+        if(currentLangFromLS === 'русский') currentLang = ruLang
         let key: keyof lang    
         for(key in currentLang) {
             if(key.toLowerCase() === value.toLocaleLowerCase()) return currentLang[key]

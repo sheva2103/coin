@@ -13,7 +13,7 @@ type Modal = {
 
 
 const initialState: appState = {
-    darkTheme: false,
+    darkTheme: true,
     mobileMenuIsOpen: false,
     modal: {
         isOpen: false,
